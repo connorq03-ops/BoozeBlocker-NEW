@@ -1,5 +1,14 @@
 import SwiftUI
 
+struct MorningSummaryDestination: View {
+    let session: ProtectionSession
+    @Environment(\.dismiss) private var dismiss
+
+    var body: some View {
+        MorningSummaryView(session: session, onDismiss: { dismiss() })
+    }
+}
+
 struct MessagePreviewDemoView: View {
     @Environment(\.dismiss) private var dismiss
 

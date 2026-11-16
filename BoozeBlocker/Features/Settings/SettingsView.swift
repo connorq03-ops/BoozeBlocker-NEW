@@ -110,7 +110,7 @@ struct SettingsView: View {
                     if FeatureFlags.morningSummaryEnabled {
                         if let session = PersistenceService.shared.loadSessionHistory().first {
                             NavigationLink("Morning Summary") {
-                                MorningSummaryView(session: session, onDismiss: {})
+                                MorningSummaryDestination(session: session)
                             }
                         } else {
                             Text("Morning Summary available after a protection session")
