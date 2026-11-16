@@ -8,22 +8,21 @@ class PersistenceService {
     private let legacyDefaults: UserDefaults
     private let store: SharedStore
     
-    // MARK: - Keys
-    private enum Keys {
-        static let blockedApps = "blockedApps"
-    }
-    
     init(defaults: UserDefaults = AppGroup.defaults, legacy: UserDefaults = .standard) {
         userDefaults = defaults
         legacyDefaults = legacy
         store = SharedStore(defaults: defaults)
         if !defaults.bool(forKey: SharedKeys.migratedFromStandard) {
-            for key in [SharedKeys.userSettings, SharedKeys.currentSession, SharedKeys.sessionHistory, SharedKeys.blockedContacts, Keys.blockedApps] {
+            for key in [SharedKeys.userSettings, SharedKeys.currentSession, SharedKeys.sessionHistory, SharedKeys.blockedContacts] {
                 if let value = legacy.object(forKey: key) {
                     defaults.set(value, forKey: key)
                 }
             }
             defaults.set(true, forKey: SharedKeys.migratedFromStandard)
+        }
+        for key in ["blockedApps", "screenTimeAuthorized"] {
+            defaults.removeObject(forKey: key)
+            legacy.removeObject(forKey: key)
         }
     }
     
@@ -51,6 +50,22 @@ class PersistenceService {
 
     func loadCurrentSession() -> ProtectionSession? {
         store.loadCurrentSession()
+    }
+
+    func loadCurrentSessionReadOnly() -> ProtectionSession? {
+        store.loadCurrentSessionReadOnly()
+    }
+
+    func ingestPendingAttempts() -> ProtectionSession? {
+        store.ingestPendingAttempts()
+    }
+
+    func endCurrentSession(reason: EndReason, expectedSessionID: UUID) -> ProtectionSession? {
+        store.endCurrentSession(reason: reason, expectedSessionID: expectedSessionID)
+    }
+
+    func updateCurrentSession(id: UUID, _ update: (inout ProtectionSession) -> Void) -> ProtectionSession? {
+        store.updateCurrentSession(id: id, update)
     }
 
     // MARK: - Session History
@@ -84,26 +99,21 @@ class PersistenceService {
         return contacts
     }
     
-    // MARK: - Blocked Apps
-    
-    func saveBlockedApps(_ apps: [BlockedApp]) {
-        if let encoded = try? JSONEncoder().encode(apps) {
-            userDefaults.set(encoded, forKey: Keys.blockedApps)
-        }
+    func drainPendingAttempts() -> [BlockedAttempt] {
+        store.drainPendingAttempts()
     }
-    
-    func loadBlockedApps() -> [BlockedApp] {
-        guard let data = userDefaults.data(forKey: Keys.blockedApps),
-              let apps = try? JSONDecoder().decode([BlockedApp].self, from: data) else {
-            return []
-        }
-        return apps
-    }
+
+    func loadSobrietyFailures() -> Int { userDefaults.integer(forKey: "sobrietyFailures") }
+    func saveSobrietyFailures(_ count: Int) { userDefaults.set(count, forKey: "sobrietyFailures") }
+    func loadSobrietyCooldown() -> Date? { userDefaults.object(forKey: "sobrietyCooldownUntil") as? Date }
+    func saveSobrietyCooldown(_ date: Date?) { userDefaults.set(date, forKey: "sobrietyCooldownUntil") }
     
     // MARK: - Reset
     
     func resetAllData() {
-        for key in [SharedKeys.userSettings, SharedKeys.currentSession, SharedKeys.sessionHistory, SharedKeys.blockedContacts, Keys.blockedApps] {
+        for key in [SharedKeys.userSettings, SharedKeys.currentSession, SharedKeys.sessionHistory, SharedKeys.blockedContacts,
+                    SharedKeys.activitySelection, SharedKeys.pendingAttempts, "sobrietyFailures", "sobrietyCooldownUntil",
+                    "blockedApps", "screenTimeAuthorized"] {
             userDefaults.removeObject(forKey: key)
             legacyDefaults.removeObject(forKey: key)
         }

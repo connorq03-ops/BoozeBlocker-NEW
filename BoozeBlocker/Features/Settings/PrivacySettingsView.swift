@@ -97,7 +97,7 @@ struct PrivacySettingsView: View {
             "exportDate": ISO8601DateFormatter().string(from: Date()),
             "sessionCount": sessions.count,
             "settings": [
-                "blockedApps": settings.blockedAppBundleIDs.count,
+                "blockedApps": ScreenTimeService.shared.selection.applicationTokens.count + ScreenTimeService.shared.selection.categoryTokens.count,
                 "blockedContacts": settings.blockedContactIDs.count,
                 "emergencyContacts": settings.emergencyContactIDs.count
             ]

@@ -15,9 +15,12 @@ struct BlockedContactsView: View {
                 HStack {
                     Image(systemName: "person.crop.circle.badge.xmark")
                         .foregroundColor(.red)
-                    Text("\(blockedContacts.count) contacts will be blocked")
+                    Text("\(blockedContacts.count) contacts saved for your summary")
                         .foregroundColor(.secondary)
                 }
+                Text("iOS can't block individual contacts. Block Messages or WhatsApp in Blocked Apps to limit messaging.")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
             }
             
             // Blocked Contacts List
@@ -29,7 +32,7 @@ struct BlockedContactsView: View {
                             .foregroundColor(.secondary)
                         Text("No blocked contacts")
                             .font(.headline)
-                        Text("Add contacts you want to block while drinking")
+                        Text("Add contacts for your summary. This does not block calls or messages.")
                             .font(.caption)
                             .foregroundColor(.secondary)
                             .multilineTextAlignment(.center)

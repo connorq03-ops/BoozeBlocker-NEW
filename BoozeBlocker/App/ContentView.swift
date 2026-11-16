@@ -37,6 +37,7 @@ struct ContentView: View {
         .onChange(of: deepLinkService.pendingAction) { _, action in
             handlePendingAction(action)
         }
+        .onAppear { handlePendingAction(deepLinkService.pendingAction) }
     }
     
     private func handleDeepLink(_ url: URL) {
@@ -49,12 +50,11 @@ struct ContentView: View {
         switch action {
         case .activate(let duration):
             selectedTab = .home
-            if let duration = duration {
-                protectionManager.activateProtection(duration: duration)
-            }
+            protectionManager.handleDeepLink(.activate(duration: duration))
             
         case .deactivate:
             selectedTab = .home
+            protectionManager.handleDeepLink(.deactivate)
             
         case .openSettings:
             selectedTab = .settings

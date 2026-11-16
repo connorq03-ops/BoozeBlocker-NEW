@@ -1,6 +1,10 @@
 import SwiftUI
 
 struct SettingsView: View {
+    @EnvironmentObject var screenTime: ScreenTimeService
+    @EnvironmentObject var protectionManager: ProtectionManager
+    @AppStorage("hasCompletedOnboarding") private var hasCompletedOnboarding = false
+    @AppStorage("hasGrantedPermissions") private var hasGrantedPermissions = false
     @State private var settings = PersistenceService.shared.loadUserSettings()
     
     var body: some View {
@@ -16,7 +20,7 @@ struct SettingsView: View {
                                 .foregroundColor(.blue)
                             Text("Blocked Apps")
                             Spacer()
-                            Text("\(settings.blockedAppBundleIDs.count)")
+                            Text("\(screenTime.selection.applicationTokens.count + screenTime.selection.categoryTokens.count)")
                                 .foregroundColor(.secondary)
                         }
                     }
@@ -153,11 +157,18 @@ struct SettingsView: View {
                 // Danger Zone
                 Section {
                     Button(role: .destructive) {
+                        guard !protectionManager.isProtectionActive else { return }
+                        screenTime.stopBlocking()
+                        screenTime.selection = .init()
                         PersistenceService.shared.resetAllData()
                         settings = UserSettings()
+                        protectionManager.reconcile()
+                        hasCompletedOnboarding = false
+                        hasGrantedPermissions = false
                     } label: {
                         Text("Reset All Data")
                     }
+                    .disabled(protectionManager.isProtectionActive)
                 } header: {
                     Text("Danger Zone")
                 } footer: {

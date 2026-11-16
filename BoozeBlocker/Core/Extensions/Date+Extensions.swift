@@ -62,8 +62,13 @@ extension Date {
     }
     
     /// Returns time interval until a specific hour today or tomorrow
-    static func timeUntil(hour: Int, minute: Int = 0) -> TimeInterval {
-        return next(hour: hour, minute: minute).timeIntervalSinceNow
+    static func timeUntil(hour: Int, minute: Int = 0, minimumDuration: TimeInterval = 0) -> TimeInterval {
+        let now = Date()
+        var target = next(hour: hour, minute: minute)
+        if target.timeIntervalSince(now) < minimumDuration {
+            target = Calendar.current.date(byAdding: .day, value: 1, to: target) ?? target
+        }
+        return target.timeIntervalSince(now)
     }
 }
 

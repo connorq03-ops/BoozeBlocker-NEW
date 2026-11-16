@@ -27,6 +27,12 @@ struct StatusCard: View {
             }
             
             // Session stats (when active)
+            if let warning = protectionManager.blockingWarning {
+                Label(warning, systemImage: "exclamationmark.triangle.fill")
+                    .font(.caption)
+                    .foregroundStyle(.orange)
+                    .multilineTextAlignment(.center)
+            }
             if protectionManager.isProtectionActive, let session = protectionManager.currentSession {
                 SessionStatsRow(session: session)
             }

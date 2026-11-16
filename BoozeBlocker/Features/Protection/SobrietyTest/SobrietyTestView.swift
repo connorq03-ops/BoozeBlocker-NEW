@@ -4,9 +4,9 @@ struct SobrietyTestView: View {
     let onComplete: (Bool) -> Void
     
     @Environment(\.dismiss) private var dismiss
+    @EnvironmentObject private var protectionManager: ProtectionManager
     @State private var test: SobrietyTest
     @State private var userAnswer: String = ""
-    @State private var attempts: Int = 0
     @State private var showError: Bool = false
     @State private var isCorrect: Bool = false
     
@@ -62,7 +62,7 @@ struct SobrietyTestView: View {
                     
                     // Error message
                     if showError {
-                        Text("Incorrect! \(maxAttempts - attempts) attempts remaining")
+                        Text("Incorrect! \(max(0, maxAttempts - protectionManager.failedSobrietyAttempts)) attempts remaining")
                             .font(.subheadline)
                             .foregroundColor(.red)
                     }
@@ -89,11 +89,13 @@ struct SobrietyTestView: View {
                         .foregroundColor(.white)
                         .cornerRadius(12)
                 }
-                .disabled(userAnswer.isEmpty || isCorrect)
+                .disabled(userAnswer.isEmpty || isCorrect || protectionManager.sobrietyCooldownRemaining > 0)
                 .padding(.horizontal)
                 
                 // Attempts counter
-                Text("Attempt \(attempts + 1) of \(maxAttempts)")
+                Text(protectionManager.sobrietyCooldownRemaining > 0
+                     ? protectionManager.sobrietyTestButtonTitle
+                     : "Attempt \(protectionManager.failedSobrietyAttempts + 1) of \(maxAttempts)")
                     .font(.caption)
                     .foregroundColor(.secondary)
                 
@@ -113,23 +115,22 @@ struct SobrietyTestView: View {
     }
     
     private func checkAnswer() {
+        protectionManager.refreshSobrietyCooldown()
+        guard protectionManager.isProtectionActive, protectionManager.sobrietyCooldownRemaining == 0, !isCorrect else { return }
         let correct = testService.validateAnswer(userAnswer, for: test)
         
         if correct {
             isCorrect = true
             showError = false
             
-            // Delay before dismissing
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-                onComplete(true)
-                dismiss()
-            }
+            onComplete(true)
+            dismiss()
         } else {
-            attempts += 1
+            protectionManager.recordSobrietyFailure()
             showError = true
             userAnswer = ""
             
-            if attempts >= maxAttempts {
+            if protectionManager.sobrietyCooldownRemaining > 0 {
                 // Failed all attempts
                 DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
                     onComplete(false)

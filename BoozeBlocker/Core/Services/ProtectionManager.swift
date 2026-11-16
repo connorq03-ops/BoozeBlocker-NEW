@@ -3,7 +3,8 @@ import Combine
 import WidgetKit
 
 /// Central manager for protection state and blocking logic
-class ProtectionManager: ObservableObject {
+@MainActor
+final class ProtectionManager: ObservableObject {
     static let shared = ProtectionManager()
     
     // MARK: - Published Properties
@@ -11,21 +12,28 @@ class ProtectionManager: ObservableObject {
     @Published private(set) var currentSession: ProtectionSession?
     @Published private(set) var isProtectionActive: Bool = false
     @Published private(set) var timeRemaining: TimeInterval?
+    @Published private(set) var blockingWarning: String?
+    @Published private(set) var sobrietyCooldownRemaining: TimeInterval = 0
+    @Published private(set) var failedSobrietyAttempts = 0
+    @Published var showSobrietyTest = false
+    @Published var showDurationPicker = false
     
     // MARK: - Private Properties
     
     private let persistence: PersistenceService
     private let notifications: NotificationService
+    private let blocker: BlockingController
     private var timer: Timer?
     private var cancellables = Set<AnyCancellable>()
     
     // MARK: - Initialization
     
-    init(persistence: PersistenceService = .shared, notifications: NotificationService = .shared) {
+    init(persistence: PersistenceService = .shared, notifications: NotificationService = .shared,
+         blocker: BlockingController? = nil) {
         self.persistence = persistence
         self.notifications = notifications
-        loadCurrentSession()
-        startTimerIfNeeded()
+        self.blocker = blocker ?? ScreenTimeService.shared
+        reconcile()
     }
     
     // MARK: - Public Methods
@@ -33,6 +41,7 @@ class ProtectionManager: ObservableObject {
     /// Activate protection with optional duration
     /// - Parameter duration: Duration in seconds, nil for manual deactivation only
     func activateProtection(duration: TimeInterval? = nil, type: ActivationType = .manual) {
+        guard !isProtectionActive, duration.map({ $0.isFinite && $0 > 0 }) ?? true else { return }
         let scheduledEnd: Date? = duration.map { Date().addingTimeInterval($0) }
         
         let session = ProtectionSession(
@@ -52,38 +61,38 @@ class ProtectionManager: ObservableObject {
         }
         WidgetCenter.shared.reloadAllTimelines()
         
-        // TODO: Activate Screen Time restrictions
-        // TODO: Activate Focus Mode for contacts
+        applyBlocking()
         
         NotificationCenter.default.post(name: .protectionActivated, object: nil)
     }
     
     /// Deactivate protection with a reason
     func deactivateProtection(reason: EndReason) {
-        guard var session = currentSession else { return }
-        
-        session.end(reason: reason)
-        persistence.addToSessionHistory(session)
-        persistence.saveCurrentSession(nil)
+        guard let cached = currentSession,
+              let session = persistence.endCurrentSession(reason: reason, expectedSessionID: cached.id) else {
+            reconcile()
+            return
+        }
+        blocker.stopBlocking()
         
         currentSession = nil
         isProtectionActive = false
         timeRemaining = nil
+        blockingWarning = nil
+        showSobrietyTest = false
+        resetSobrietyFailures()
         
         stopTimer()
         notifications.cancelSessionNotifications()
         notifications.notifySessionEnded(blockedAttempts: session.blockedAttempts.count)
         WidgetCenter.shared.reloadAllTimelines()
         
-        // TODO: Deactivate Screen Time restrictions
-        // TODO: Deactivate Focus Mode
-        
         NotificationCenter.default.post(name: .protectionDeactivated, object: nil)
     }
     
     /// Record a blocked attempt
     func recordBlockedAttempt(type: AttemptType, targetName: String, targetIdentifier: String, outcome: AttemptOutcome = .blocked) {
-        guard var session = currentSession else { return }
+        guard let cached = currentSession else { return }
         
         let attempt = BlockedAttempt(
             attemptType: type,
@@ -92,30 +101,131 @@ class ProtectionManager: ObservableObject {
             outcome: outcome
         )
         
-        session.addBlockedAttempt(attempt)
+        guard let session = persistence.updateCurrentSession(id: cached.id, { $0.addBlockedAttempt(attempt) }) else {
+            reconcile()
+            return
+        }
         currentSession = session
-        persistence.saveCurrentSession(session)
         
         WidgetCenter.shared.reloadAllTimelines()
         NotificationCenter.default.post(name: .attemptBlocked, object: attempt)
     }
     
     func extendSession(by interval: TimeInterval) {
-        guard var session = currentSession, session.isActive,
-              let end = session.scheduledEndTime else { return }
-        session.scheduledEndTime = end.addingTimeInterval(interval)
+        guard let cached = currentSession, cached.scheduledEndTime != nil else { return }
+        guard let session = persistence.updateCurrentSession(id: cached.id, { session in
+            if let end = session.scheduledEndTime {
+                session.scheduledEndTime = end.addingTimeInterval(interval)
+            }
+        }), let end = session.scheduledEndTime else {
+            reconcile()
+            return
+        }
         currentSession = session
-        persistence.saveCurrentSession(session)
-        notifications.scheduleSessionEndingNotification(endTime: end.addingTimeInterval(interval))
+        notifications.scheduleSessionEndingNotification(endTime: end)
+        applyBlocking()
         updateTimeRemaining()
         WidgetCenter.shared.reloadAllTimelines()
     }
 
-    /// Check if a specific app is currently blocked
-    func isAppBlocked(bundleIdentifier: String) -> Bool {
-        guard isProtectionActive else { return false }
-        let settings = persistence.loadUserSettings()
-        return settings.blockedAppBundleIDs.contains(bundleIdentifier)
+    func reconcile() {
+        refreshSobrietyCooldown()
+        ingestPendingAttempts()
+        loadCurrentSession()
+        do {
+            try blocker.reconcile(sessionActive: isProtectionActive, endDate: currentSession?.scheduledEndTime)
+            updateBlockingWarning()
+        } catch {
+            blockingWarning = "Apps may not unblock automatically: \(error.localizedDescription)"
+        }
+        if isProtectionActive {
+            startTimerIfNeeded()
+        } else {
+            stopTimer()
+            showSobrietyTest = false
+            blockingWarning = nil
+            resetSobrietyFailures()
+        }
+        WidgetCenter.shared.reloadAllTimelines()
+    }
+
+    func ingestPendingAttempts() {
+        currentSession = persistence.ingestPendingAttempts()
+    }
+
+    func handleDeepLink(_ action: DeepLinkAction) {
+        switch action {
+        case .activate(let duration):
+            guard !isProtectionActive else { return }
+            if let duration { activateProtection(duration: duration) }
+            else { showDurationPicker = true }
+        case .deactivate:
+            requestSobrietyTest()
+        case .openSettings, .openHistory:
+            break
+        }
+    }
+
+    func requestSobrietyTest() {
+        refreshSobrietyCooldown()
+        guard isProtectionActive, sobrietyCooldownRemaining == 0 else { return }
+        showDurationPicker = false
+        showSobrietyTest = true
+    }
+
+    func recordSobrietyFailure(now: Date = Date()) {
+        refreshSobrietyCooldown(now: now)
+        guard sobrietyCooldownRemaining == 0 else { return }
+        failedSobrietyAttempts += 1
+        persistence.saveSobrietyFailures(failedSobrietyAttempts)
+        if failedSobrietyAttempts >= 3 {
+            persistence.saveSobrietyCooldown(now.addingTimeInterval(10 * 60))
+            refreshSobrietyCooldown(now: now)
+        }
+    }
+
+    func refreshSobrietyCooldown(now: Date = Date()) {
+        failedSobrietyAttempts = persistence.loadSobrietyFailures()
+        if let until = persistence.loadSobrietyCooldown() {
+            sobrietyCooldownRemaining = max(0, until.timeIntervalSince(now))
+            if sobrietyCooldownRemaining == 0 { resetSobrietyFailures() }
+        } else {
+            sobrietyCooldownRemaining = 0
+        }
+    }
+
+    var sobrietyTestButtonTitle: String {
+        guard sobrietyCooldownRemaining > 0 else { return "Take Sobriety Test" }
+        let seconds = Int(ceil(sobrietyCooldownRemaining))
+        return String(format: "Take Sobriety Test (%d:%02d)", seconds / 60, seconds % 60)
+    }
+
+    private func resetSobrietyFailures() {
+        persistence.saveSobrietyFailures(0)
+        persistence.saveSobrietyCooldown(nil)
+        failedSobrietyAttempts = 0
+        sobrietyCooldownRemaining = 0
+    }
+
+    private func applyBlocking() {
+        do {
+            try blocker.startBlocking(until: currentSession?.scheduledEndTime)
+            updateBlockingWarning()
+        } catch {
+            blockingWarning = "Apps may not unblock automatically: \(error.localizedDescription)"
+        }
+    }
+
+    private func updateBlockingWarning() {
+        if !blocker.isAuthorized {
+            blockingWarning = "Screen Time access is unavailable — apps are not being blocked."
+        } else if !blocker.hasSelection {
+            blockingWarning = "No apps selected — nothing is being blocked."
+        } else if let error = (blocker as? ScreenTimeService)?.lastError {
+            blockingWarning = error
+        } else {
+            blockingWarning = nil
+        }
     }
     
     /// Check if a specific contact is currently blocked
@@ -161,7 +271,7 @@ class ProtectionManager: ObservableObject {
         stopTimer()
         
         timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] _ in
-            self?.timerTick()
+            Task { @MainActor in self?.timerTick() }
         }
     }
     
@@ -171,6 +281,7 @@ class ProtectionManager: ObservableObject {
     }
     
     private func timerTick() {
+        refreshSobrietyCooldown()
         updateTimeRemaining()
         
         // Check if timer expired

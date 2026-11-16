@@ -6,7 +6,7 @@ struct DurationPickerSheet: View {
     @Environment(\.dismiss) private var dismiss
     
     private let durations: [(String, TimeInterval?)] = [
-        ("Until 8:00 AM", calculateTimeUntil8AM()),
+        ("Until 8:00 AM", Date.timeUntil(hour: 8, minimumDuration: 3600)),
         ("4 hours", 4 * 60 * 60),
         ("6 hours", 6 * 60 * 60),
         ("8 hours", 8 * 60 * 60),
@@ -64,24 +64,6 @@ struct DurationPickerSheet: View {
         }
     }
     
-    private static func calculateTimeUntil8AM() -> TimeInterval {
-        let calendar = Calendar.current
-        let now = Date()
-        
-        var components = calendar.dateComponents([.year, .month, .day], from: now)
-        components.hour = 8
-        components.minute = 0
-        components.second = 0
-        
-        var target = calendar.date(from: components) ?? now
-        
-        // If 8 AM has already passed today, use tomorrow's 8 AM
-        if target <= now {
-            target = calendar.date(byAdding: .day, value: 1, to: target) ?? target
-        }
-        
-        return target.timeIntervalSince(now)
-    }
 }
 
 #Preview {

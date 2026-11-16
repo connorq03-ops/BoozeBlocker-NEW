@@ -1,4 +1,5 @@
 import SwiftUI
+import FamilyControls
 
 struct PermissionsView: View {
     @Binding var hasGrantedPermissions: Bool
@@ -11,6 +12,7 @@ struct PermissionsView: View {
     @State private var screenTimeGranted = false
     @State private var notificationsGranted = false
     @State private var isRequestingPermission = false
+    @State private var showPicker = false
     
     var allPermissionsGranted: Bool {
         contactsGranted && screenTimeGranted && notificationsGranted
@@ -43,13 +45,18 @@ struct PermissionsView: View {
                 PermissionCard(
                     icon: "person.crop.circle.fill",
                     title: "Contacts",
-                    description: "To select which contacts to block",
+                    description: "For your summary and emergency contact list",
                     isGranted: contactsGranted,
                     isLoading: isRequestingPermission
                 ) {
                     await requestContactsPermission()
                 }
                 
+                #if targetEnvironment(simulator)
+                Text("Screen Time requires a real device")
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+                #else
                 PermissionCard(
                     icon: "hourglass",
                     title: "Screen Time",
@@ -59,6 +66,10 @@ struct PermissionsView: View {
                 ) {
                     await requestScreenTimePermission()
                 }
+                if screenTimeService.isAuthorized {
+                    Button("Choose apps to block") { showPicker = true }
+                }
+                #endif
                 
                 PermissionCard(
                     icon: "bell.fill",
@@ -96,6 +107,11 @@ struct PermissionsView: View {
             }
             .padding(.horizontal)
             .padding(.bottom, 40)
+        }
+        .familyActivityPicker(isPresented: $showPicker, selection: $screenTimeService.selection)
+        .onAppear {
+            screenTimeService.checkAuthorizationStatus()
+            screenTimeGranted = screenTimeService.isAuthorized
         }
     }
     

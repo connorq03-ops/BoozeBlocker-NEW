@@ -2,9 +2,7 @@ import SwiftUI
 
 struct HomeView: View {
     @EnvironmentObject var protectionManager: ProtectionManager
-    @State private var showDurationPicker = false
     @State private var showDeactivateConfirm = false
-    @State private var showSobrietyTest = false
     
     var body: some View {
         NavigationStack {
@@ -34,19 +32,19 @@ struct HomeView: View {
             .navigationTitle("Booze Blocker")
             .navigationBarTitleDisplayMode(.inline)
         }
-        .sheet(isPresented: $showDurationPicker) {
+        .sheet(isPresented: $protectionManager.showDurationPicker) {
             DurationPickerSheet { duration in
                 protectionManager.activateProtection(duration: duration)
-                showDurationPicker = false
+                protectionManager.showDurationPicker = false
             }
             .presentationDetents([.medium])
         }
-        .sheet(isPresented: $showSobrietyTest) {
+        .sheet(isPresented: $protectionManager.showSobrietyTest) {
             SobrietyTestView { passed in
                 if passed {
                     protectionManager.deactivateProtection(reason: .sobrietyTestPassed)
                 }
-                showSobrietyTest = false
+                protectionManager.showSobrietyTest = false
             }
         }
         .confirmationDialog(
@@ -54,9 +52,10 @@ struct HomeView: View {
             isPresented: $showDeactivateConfirm,
             titleVisibility: .visible
         ) {
-            Button("Take Sobriety Test", role: .destructive) {
-                showSobrietyTest = true
+            Button(protectionManager.sobrietyTestButtonTitle, role: .destructive) {
+                protectionManager.requestSobrietyTest()
             }
+            .disabled(protectionManager.sobrietyCooldownRemaining > 0)
             Button("Cancel", role: .cancel) {}
         } message: {
             Text("You'll need to pass a sobriety test to deactivate protection.")
@@ -114,7 +113,7 @@ struct HomeView: View {
             if protectionManager.isProtectionActive {
                 showDeactivateConfirm = true
             } else {
-                showDurationPicker = true
+                protectionManager.showDurationPicker = true
             }
         } label: {
             HStack {

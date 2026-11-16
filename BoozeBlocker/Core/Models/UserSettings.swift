@@ -2,9 +2,6 @@ import Foundation
 
 /// User's persistent settings for the app
 struct UserSettings: Codable, Equatable {
-    /// Bundle identifiers of apps to block (e.g., "com.instagram.Instagram")
-    var blockedAppBundleIDs: [String]
-    
     /// Contact identifiers to restrict access to
     var blockedContactIDs: [String]
     
@@ -22,14 +19,12 @@ struct UserSettings: Codable, Equatable {
     
     /// Default initializer with sensible defaults
     init(
-        blockedAppBundleIDs: [String] = [],
         blockedContactIDs: [String] = [],
         emergencyContactIDs: [String] = [],
         defaultDuration: TimeInterval? = 8 * 60 * 60, // 8 hours
         sobrietyTestDifficulty: SobrietyTestDifficulty = .medium,
         showBlockedAttemptNotifications: Bool = true
     ) {
-        self.blockedAppBundleIDs = blockedAppBundleIDs
         self.blockedContactIDs = blockedContactIDs
         self.emergencyContactIDs = emergencyContactIDs
         self.defaultDuration = defaultDuration
@@ -37,14 +32,13 @@ struct UserSettings: Codable, Equatable {
         self.showBlockedAttemptNotifications = showBlockedAttemptNotifications
     }
     private enum CodingKeys: String, CodingKey {
-        case blockedAppBundleIDs, blockedContactIDs, emergencyContactIDs, defaultDuration
+        case blockedContactIDs, emergencyContactIDs, defaultDuration
         case sobrietyTestDifficulty, showBlockedAttemptNotifications
     }
 
     init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
         let defaults = UserSettings()
-        blockedAppBundleIDs = try values.decodeIfPresent([String].self, forKey: .blockedAppBundleIDs) ?? defaults.blockedAppBundleIDs
         blockedContactIDs = try values.decodeIfPresent([String].self, forKey: .blockedContactIDs) ?? defaults.blockedContactIDs
         emergencyContactIDs = try values.decodeIfPresent([String].self, forKey: .emergencyContactIDs) ?? defaults.emergencyContactIDs
         defaultDuration = values.contains(.defaultDuration)
@@ -56,7 +50,6 @@ struct UserSettings: Codable, Equatable {
 
     func encode(to encoder: Encoder) throws {
         var values = encoder.container(keyedBy: CodingKeys.self)
-        try values.encode(blockedAppBundleIDs, forKey: .blockedAppBundleIDs)
         try values.encode(blockedContactIDs, forKey: .blockedContactIDs)
         try values.encode(emergencyContactIDs, forKey: .emergencyContactIDs)
         try values.encode(defaultDuration, forKey: .defaultDuration)

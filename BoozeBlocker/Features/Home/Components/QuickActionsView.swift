@@ -16,7 +16,7 @@ struct QuickActionsView: View {
                     icon: "sunrise.fill",
                     color: .orange
                 ) {
-                    onActivate(Date.timeUntil(hour: 8))
+                    onActivate(Date.timeUntil(hour: 8, minimumDuration: 3600))
                 }
                 
                 QuickActionButton(
