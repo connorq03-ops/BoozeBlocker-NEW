@@ -68,13 +68,12 @@ final class ProtectionManager: ObservableObject {
     
     /// Deactivate protection with a reason
     func deactivateProtection(reason: EndReason) {
+        guard let cached = currentSession,
+              let session = persistence.endCurrentSession(reason: reason, expectedSessionID: cached.id) else {
+            reconcile()
+            return
+        }
         blocker.stopBlocking()
-        guard var session = currentSession else { return }
-        session.blockedAttempts.append(contentsOf: persistence.drainPendingAttempts())
-        
-        session.end(reason: reason)
-        persistence.addToSessionHistory(session)
-        persistence.saveCurrentSession(nil)
         
         currentSession = nil
         isProtectionActive = false
@@ -93,7 +92,7 @@ final class ProtectionManager: ObservableObject {
     
     /// Record a blocked attempt
     func recordBlockedAttempt(type: AttemptType, targetName: String, targetIdentifier: String, outcome: AttemptOutcome = .blocked) {
-        guard var session = currentSession else { return }
+        guard let cached = currentSession else { return }
         
         let attempt = BlockedAttempt(
             attemptType: type,
@@ -102,21 +101,28 @@ final class ProtectionManager: ObservableObject {
             outcome: outcome
         )
         
-        session.addBlockedAttempt(attempt)
+        guard let session = persistence.updateCurrentSession(id: cached.id, { $0.addBlockedAttempt(attempt) }) else {
+            reconcile()
+            return
+        }
         currentSession = session
-        persistence.saveCurrentSession(session)
         
         WidgetCenter.shared.reloadAllTimelines()
         NotificationCenter.default.post(name: .attemptBlocked, object: attempt)
     }
     
     func extendSession(by interval: TimeInterval) {
-        guard var session = currentSession, session.isActive,
-              let end = session.scheduledEndTime else { return }
-        session.scheduledEndTime = end.addingTimeInterval(interval)
+        guard let cached = currentSession, cached.scheduledEndTime != nil else { return }
+        guard let session = persistence.updateCurrentSession(id: cached.id, { session in
+            if let end = session.scheduledEndTime {
+                session.scheduledEndTime = end.addingTimeInterval(interval)
+            }
+        }), let end = session.scheduledEndTime else {
+            reconcile()
+            return
+        }
         currentSession = session
-        persistence.saveCurrentSession(session)
-        notifications.scheduleSessionEndingNotification(endTime: end.addingTimeInterval(interval))
+        notifications.scheduleSessionEndingNotification(endTime: end)
         applyBlocking()
         updateTimeRemaining()
         WidgetCenter.shared.reloadAllTimelines()
@@ -138,15 +144,13 @@ final class ProtectionManager: ObservableObject {
             stopTimer()
             showSobrietyTest = false
             blockingWarning = nil
+            resetSobrietyFailures()
         }
         WidgetCenter.shared.reloadAllTimelines()
     }
 
     func ingestPendingAttempts() {
-        guard var session = persistence.loadCurrentSession() else { return }
-        session.blockedAttempts.append(contentsOf: persistence.drainPendingAttempts())
-        persistence.saveCurrentSession(session)
-        currentSession = session
+        currentSession = persistence.ingestPendingAttempts()
     }
 
     func handleDeepLink(_ action: DeepLinkAction) {
