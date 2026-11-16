@@ -5,6 +5,7 @@ class PersistenceService {
     static let shared = PersistenceService()
     
     private let userDefaults: UserDefaults
+    private let legacyDefaults: UserDefaults
     private let store: SharedStore
     
     // MARK: - Keys
@@ -14,6 +15,7 @@ class PersistenceService {
     
     init(defaults: UserDefaults = AppGroup.defaults, legacy: UserDefaults = .standard) {
         userDefaults = defaults
+        legacyDefaults = legacy
         store = SharedStore(defaults: defaults)
         if !defaults.bool(forKey: SharedKeys.migratedFromStandard) {
             for key in [SharedKeys.userSettings, SharedKeys.currentSession, SharedKeys.sessionHistory, SharedKeys.blockedContacts, Keys.blockedApps] {
@@ -63,6 +65,7 @@ class PersistenceService {
 
     func clearSessionHistory() {
         store.clearSessionHistory()
+        legacyDefaults.removeObject(forKey: SharedKeys.sessionHistory)
     }
 
     // MARK: - Blocked Contacts
@@ -100,10 +103,9 @@ class PersistenceService {
     // MARK: - Reset
     
     func resetAllData() {
-        userDefaults.removeObject(forKey: SharedKeys.userSettings)
-        userDefaults.removeObject(forKey: SharedKeys.currentSession)
-        userDefaults.removeObject(forKey: SharedKeys.sessionHistory)
-        userDefaults.removeObject(forKey: SharedKeys.blockedContacts)
-        userDefaults.removeObject(forKey: Keys.blockedApps)
+        for key in [SharedKeys.userSettings, SharedKeys.currentSession, SharedKeys.sessionHistory, SharedKeys.blockedContacts, Keys.blockedApps] {
+            userDefaults.removeObject(forKey: key)
+            legacyDefaults.removeObject(forKey: key)
+        }
     }
 }

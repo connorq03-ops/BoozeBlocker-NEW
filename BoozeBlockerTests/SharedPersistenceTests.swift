@@ -56,6 +56,39 @@ final class SharedPersistenceTests: XCTestCase {
         XCTAssertNil(destination.object(forKey: SharedKeys.currentSession))
     }
 
+    func testResetRemovesMigratedKeysFromBothStores() {
+        let shared = defaults()
+        let legacy = defaults()
+        let keys = [SharedKeys.userSettings, SharedKeys.currentSession, SharedKeys.sessionHistory, SharedKeys.blockedContacts, "blockedApps"]
+        for key in keys { legacy.set(Data(key.utf8), forKey: key) }
+        let service = PersistenceService(defaults: shared, legacy: legacy)
+        for key in keys {
+            XCTAssertNotNil(shared.object(forKey: key))
+            XCTAssertNotNil(legacy.object(forKey: key))
+        }
+        service.resetAllData()
+        service.resetAllData()
+        for key in keys {
+            XCTAssertNil(shared.object(forKey: key))
+            XCTAssertNil(legacy.object(forKey: key))
+        }
+        XCTAssertTrue(shared.bool(forKey: SharedKeys.migratedFromStandard))
+    }
+
+    func testClearHistoryRemovesLegacyCopyOnlyForHistory() {
+        let shared = defaults()
+        let legacy = defaults()
+        legacy.set(Data("history".utf8), forKey: SharedKeys.sessionHistory)
+        legacy.set(Data("settings".utf8), forKey: SharedKeys.userSettings)
+        let service = PersistenceService(defaults: shared, legacy: legacy)
+        service.clearSessionHistory()
+        service.clearSessionHistory()
+        XCTAssertNil(shared.object(forKey: SharedKeys.sessionHistory))
+        XCTAssertNil(legacy.object(forKey: SharedKeys.sessionHistory))
+        XCTAssertEqual(shared.data(forKey: SharedKeys.userSettings), Data("settings".utf8))
+        XCTAssertEqual(legacy.data(forKey: SharedKeys.userSettings), Data("settings".utf8))
+    }
+
     func testSettingsDecodeOldAndEmptyJSON() throws {
         let old = Data(#"{"hasCompletedOnboarding":true,"blockedAppBundleIDs":["com.example.app"]}"#.utf8)
         let settings = try JSONDecoder().decode(UserSettings.self, from: old)
