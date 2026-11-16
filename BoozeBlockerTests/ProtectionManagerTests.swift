@@ -3,25 +3,22 @@ import XCTest
 
 final class ProtectionManagerTests: XCTestCase {
     func testActivateWhileActivePreservesSessionAndPersistence() throws {
-        let domain = try XCTUnwrap(Bundle.main.bundleIdentifier)
-        let defaults = UserDefaults.standard
-        let savedDomain = defaults.persistentDomain(forName: domain)
-        let manager = ProtectionManager.shared
-        let persistence = PersistenceService.shared
-        manager.deactivateProtection(reason: .manualStop)
-        defaults.removePersistentDomain(forName: domain)
+        let domain = "test.protection.\(UUID().uuidString)"
+        let legacyDomain = "test.legacy.\(UUID().uuidString)"
+        let defaults = try XCTUnwrap(UserDefaults(suiteName: domain))
+        let legacy = try XCTUnwrap(UserDefaults(suiteName: legacyDomain))
+        let persistence = PersistenceService(defaults: defaults, legacy: legacy)
+        let manager = ProtectionManager(persistence: persistence)
         defer {
             manager.deactivateProtection(reason: .manualStop)
             defaults.removePersistentDomain(forName: domain)
-            if let savedDomain = savedDomain {
-                defaults.setPersistentDomain(savedDomain, forName: domain)
-            }
+            legacy.removePersistentDomain(forName: legacyDomain)
         }
 
         manager.activateProtection(duration: 3600)
         manager.recordBlockedAttempt(type: .app, targetName: "Example", targetIdentifier: "com.example.app")
         let original = try XCTUnwrap(manager.currentSession)
-        let persistedData = try XCTUnwrap(defaults.data(forKey: "currentSession"))
+        let persistedData = try XCTUnwrap(defaults.data(forKey: SharedKeys.currentSession))
         XCTAssertEqual(original.blockedAttempts.count, 1)
 
         manager.activateProtection(duration: 60, type: .scheduled)
@@ -31,8 +28,9 @@ final class ProtectionManagerTests: XCTestCase {
         XCTAssertEqual(current.id, original.id)
         XCTAssertEqual(current.startTime, original.startTime)
         XCTAssertEqual(current.blockedAttempts.map(\.id), original.blockedAttempts.map(\.id))
-        XCTAssertEqual(defaults.data(forKey: "currentSession"), persistedData)
-        let reloaded = try XCTUnwrap(persistence.loadCurrentSession())
+        XCTAssertEqual(defaults.data(forKey: SharedKeys.currentSession), persistedData)
+        let reloadedPersistence = PersistenceService(defaults: defaults, legacy: legacy)
+        let reloaded = try XCTUnwrap(reloadedPersistence.loadCurrentSession())
         XCTAssertEqual(reloaded.id, original.id)
         XCTAssertEqual(reloaded.startTime, original.startTime)
         XCTAssertEqual(reloaded.blockedAttempts.map(\.id), original.blockedAttempts.map(\.id))
