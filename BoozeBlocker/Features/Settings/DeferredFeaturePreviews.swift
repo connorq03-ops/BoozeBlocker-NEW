@@ -17,7 +17,8 @@ struct MessagePreviewDemoView: View {
             contactName: "Preview contact",
             onSendAnyway: { dismiss() },
             onCancel: { dismiss() },
-            onSaveForLater: { dismiss() }
+            onSaveForLater: { dismiss() },
+            isDemo: true
         )
     }
 }
