@@ -2,6 +2,8 @@ import SwiftUI
 
 @main
 struct BoozeBlockerApp: App {
+    @UIApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
+    @ObservedObject private var appearanceManager = AppearanceManager.shared
     @StateObject private var protectionManager: ProtectionManager
     @StateObject private var screenTimeService: ScreenTimeService
     @StateObject private var notificationService: NotificationService
@@ -17,7 +19,7 @@ struct BoozeBlockerApp: App {
             if let bundleIdentifier = Bundle.main.bundleIdentifier {
                 UserDefaults.standard.removePersistentDomain(forName: bundleIdentifier)
             }
-            let appGroup = "group.com.boozeblocker.app"
+            let appGroup = AppGroup.id
             UserDefaults(suiteName: appGroup)?.removePersistentDomain(forName: appGroup)
             hasCompletedOnboarding = false
             hasGrantedPermissions = false
@@ -34,6 +36,8 @@ struct BoozeBlockerApp: App {
                 hasCompletedOnboarding: $hasCompletedOnboarding,
                 hasGrantedPermissions: $hasGrantedPermissions
             )
+            .preferredColorScheme(appearanceManager.colorScheme.colorScheme)
+            .tint(appearanceManager.accentColor.color)
             .environmentObject(protectionManager)
             .environmentObject(screenTimeService)
             .environmentObject(notificationService)

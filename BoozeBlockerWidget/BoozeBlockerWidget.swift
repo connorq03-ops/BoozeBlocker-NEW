@@ -1,13 +1,7 @@
 import WidgetKit
 import SwiftUI
 
-/// Widget entry containing protection status
-struct ProtectionEntry: TimelineEntry {
-    let date: Date
-    let isProtected: Bool
-    let timeRemaining: TimeInterval?
-    let blockedAttempts: Int
-}
+extension ProtectionEntry: TimelineEntry {}
 
 /// Provider for widget timeline
 struct ProtectionProvider: TimelineProvider {
@@ -31,32 +25,11 @@ struct ProtectionProvider: TimelineProvider {
     }
     
     func getTimeline(in context: Context, completion: @escaping (Timeline<ProtectionEntry>) -> Void) {
-        // Load current session from shared UserDefaults (App Group)
-        let sharedDefaults = UserDefaults(suiteName: "group.com.boozeblocker.app")
-        
-        var isProtected = false
-        var timeRemaining: TimeInterval? = nil
-        var blockedAttempts = 0
-        
-        if let sessionData = sharedDefaults?.data(forKey: "currentSession"),
-           let session = try? JSONDecoder().decode(ProtectionSession.self, from: sessionData) {
-            isProtected = session.isActive
-            timeRemaining = session.timeRemaining
-            blockedAttempts = session.blockedAttempts.count
-        }
-        
-        let entry = ProtectionEntry(
-            date: Date(),
-            isProtected: isProtected,
-            timeRemaining: timeRemaining,
-            blockedAttempts: blockedAttempts
-        )
-        
-        // Update every minute when protected, every 15 minutes when not
-        let updateInterval: TimeInterval = isProtected ? 60 : 15 * 60
-        let nextUpdate = Date().addingTimeInterval(updateInterval)
-        
-        let timeline = Timeline(entries: [entry], policy: .after(nextUpdate))
+        let now = Date()
+        let session = SharedStore(defaults: AppGroup.defaults).loadCurrentSession()
+        let entries = ProtectionEntry.entries(for: session, now: now)
+        let policy: TimelineReloadPolicy = entries.count > 1 ? .atEnd : .after(now.addingTimeInterval(15 * 60))
+        let timeline = Timeline(entries: entries, policy: policy)
         completion(timeline)
     }
 }

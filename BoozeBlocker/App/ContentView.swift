@@ -31,7 +31,6 @@ struct ContentView: View {
                 }
                 .tag(Tab.history)
         }
-        .tint(.blue)
         .onOpenURL { url in
             handleDeepLink(url)
         }

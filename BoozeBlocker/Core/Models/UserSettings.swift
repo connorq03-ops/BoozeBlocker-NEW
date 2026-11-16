@@ -20,9 +20,6 @@ struct UserSettings: Codable, Equatable {
     /// Whether to show notifications when attempts are blocked
     var showBlockedAttemptNotifications: Bool
     
-    /// Whether onboarding has been completed
-    var hasCompletedOnboarding: Bool
-    
     /// Default initializer with sensible defaults
     init(
         blockedAppBundleIDs: [String] = [],
@@ -30,8 +27,7 @@ struct UserSettings: Codable, Equatable {
         emergencyContactIDs: [String] = [],
         defaultDuration: TimeInterval? = 8 * 60 * 60, // 8 hours
         sobrietyTestDifficulty: SobrietyTestDifficulty = .medium,
-        showBlockedAttemptNotifications: Bool = true,
-        hasCompletedOnboarding: Bool = false
+        showBlockedAttemptNotifications: Bool = true
     ) {
         self.blockedAppBundleIDs = blockedAppBundleIDs
         self.blockedContactIDs = blockedContactIDs
@@ -39,7 +35,21 @@ struct UserSettings: Codable, Equatable {
         self.defaultDuration = defaultDuration
         self.sobrietyTestDifficulty = sobrietyTestDifficulty
         self.showBlockedAttemptNotifications = showBlockedAttemptNotifications
-        self.hasCompletedOnboarding = hasCompletedOnboarding
+    }
+    private enum CodingKeys: String, CodingKey {
+        case blockedAppBundleIDs, blockedContactIDs, emergencyContactIDs, defaultDuration
+        case sobrietyTestDifficulty, showBlockedAttemptNotifications
+    }
+
+    init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        let defaults = UserSettings()
+        blockedAppBundleIDs = try values.decodeIfPresent([String].self, forKey: .blockedAppBundleIDs) ?? defaults.blockedAppBundleIDs
+        blockedContactIDs = try values.decodeIfPresent([String].self, forKey: .blockedContactIDs) ?? defaults.blockedContactIDs
+        emergencyContactIDs = try values.decodeIfPresent([String].self, forKey: .emergencyContactIDs) ?? defaults.emergencyContactIDs
+        defaultDuration = try values.decodeIfPresent(TimeInterval.self, forKey: .defaultDuration) ?? defaults.defaultDuration
+        sobrietyTestDifficulty = try values.decodeIfPresent(SobrietyTestDifficulty.self, forKey: .sobrietyTestDifficulty) ?? defaults.sobrietyTestDifficulty
+        showBlockedAttemptNotifications = try values.decodeIfPresent(Bool.self, forKey: .showBlockedAttemptNotifications) ?? defaults.showBlockedAttemptNotifications
     }
 }
 

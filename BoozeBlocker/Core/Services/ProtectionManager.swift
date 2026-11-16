@@ -1,5 +1,6 @@
 import Foundation
 import Combine
+import WidgetKit
 
 /// Central manager for protection state and blocking logic
 class ProtectionManager: ObservableObject {
@@ -13,13 +14,16 @@ class ProtectionManager: ObservableObject {
     
     // MARK: - Private Properties
     
-    private let persistence = PersistenceService.shared
+    private let persistence: PersistenceService
+    private let notifications: NotificationService
     private var timer: Timer?
     private var cancellables = Set<AnyCancellable>()
     
     // MARK: - Initialization
     
-    private init() {
+    init(persistence: PersistenceService = .shared, notifications: NotificationService = .shared) {
+        self.persistence = persistence
+        self.notifications = notifications
         loadCurrentSession()
         startTimerIfNeeded()
     }
@@ -41,7 +45,12 @@ class ProtectionManager: ObservableObject {
         isProtectionActive = true
         
         persistence.saveCurrentSession(session)
+        updateTimeRemaining()
         startTimerIfNeeded()
+        if let end = session.scheduledEndTime {
+            notifications.scheduleSessionEndingNotification(endTime: end)
+        }
+        WidgetCenter.shared.reloadAllTimelines()
         
         // TODO: Activate Screen Time restrictions
         // TODO: Activate Focus Mode for contacts
@@ -62,6 +71,9 @@ class ProtectionManager: ObservableObject {
         timeRemaining = nil
         
         stopTimer()
+        notifications.cancelSessionNotifications()
+        notifications.notifySessionEnded(blockedAttempts: session.blockedAttempts.count)
+        WidgetCenter.shared.reloadAllTimelines()
         
         // TODO: Deactivate Screen Time restrictions
         // TODO: Deactivate Focus Mode
@@ -84,9 +96,21 @@ class ProtectionManager: ObservableObject {
         currentSession = session
         persistence.saveCurrentSession(session)
         
+        WidgetCenter.shared.reloadAllTimelines()
         NotificationCenter.default.post(name: .attemptBlocked, object: attempt)
     }
     
+    func extendSession(by interval: TimeInterval) {
+        guard var session = currentSession, session.isActive,
+              let end = session.scheduledEndTime else { return }
+        session.scheduledEndTime = end.addingTimeInterval(interval)
+        currentSession = session
+        persistence.saveCurrentSession(session)
+        notifications.scheduleSessionEndingNotification(endTime: end.addingTimeInterval(interval))
+        updateTimeRemaining()
+        WidgetCenter.shared.reloadAllTimelines()
+    }
+
     /// Check if a specific app is currently blocked
     func isAppBlocked(bundleIdentifier: String) -> Bool {
         guard isProtectionActive else { return false }
