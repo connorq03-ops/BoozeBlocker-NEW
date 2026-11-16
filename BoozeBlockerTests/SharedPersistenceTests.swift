@@ -166,6 +166,7 @@ final class SharedPersistenceTests: XCTestCase {
         manager.activateProtection()
         manager.extendSession(by: 7200)
         XCTAssertNil(manager.currentSession?.scheduledEndTime)
+        manager.deactivateProtection(reason: .manualStop)
         manager.activateProtection(duration: 14400)
         defer { manager.deactivateProtection(reason: .manualStop) }
         let end = try XCTUnwrap(manager.currentSession?.scheduledEndTime)
