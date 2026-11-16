@@ -29,6 +29,8 @@ class ProtectionManager: ObservableObject {
     /// Activate protection with optional duration
     /// - Parameter duration: Duration in seconds, nil for manual deactivation only
     func activateProtection(duration: TimeInterval? = nil, type: ActivationType = .manual) {
+        guard !isProtectionActive else { return }
+
         let scheduledEnd: Date? = duration.map { Date().addingTimeInterval($0) }
         
         let session = ProtectionSession(

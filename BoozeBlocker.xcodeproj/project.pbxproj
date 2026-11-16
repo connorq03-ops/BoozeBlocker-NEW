@@ -45,6 +45,7 @@
 		8EDE70E56FB330BD5C14A6E1 /* UserSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D5F50BA4E8E73333762FE76 /* UserSettings.swift */; };
 		8FF017569F13D336A67FE3DC /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = A459FE0B4C08A0033E6B2008 /* PrivacyInfo.xcprivacy */; };
 		91FF25E832DE9FFD4F647423 /* BalanceTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90AB04487A9A1E1D00194EDF /* BalanceTestView.swift */; };
+		9838F37B154992A1E7D68EFA /* ProtectionManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18A5E0142987C5D16A6D6E17 /* ProtectionManagerTests.swift */; };
 		9C0C7E74A9B0A5160269505D /* SiriShortcutsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 959AA4F18AA29E2D545BECEB /* SiriShortcutsView.swift */; };
 		A156AB2E8721415E0E71CBE0 /* BlockedContact.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2FDA3FB36F1E6EBAAC4540D /* BlockedContact.swift */; };
 		A2F12C3B599DBF8CFEEB9DA8 /* HapticService.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFB516437CAFD350F8BDA698 /* HapticService.swift */; };
@@ -118,6 +119,7 @@
 		090151B039405A6A3FE40BDA /* HistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryView.swift; sourceTree = "<group>"; };
 		16FBD093B86ABA2F11366EF7 /* ReactionTestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReactionTestView.swift; sourceTree = "<group>"; };
 		170143CB5E7C658E9A7C4768 /* QuickActionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickActionsView.swift; sourceTree = "<group>"; };
+		18A5E0142987C5D16A6D6E17 /* ProtectionManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProtectionManagerTests.swift; sourceTree = "<group>"; };
 		1CABED0AAC2F2BBC03B8FA32 /* ScheduleSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleSettingsView.swift; sourceTree = "<group>"; };
 		1D5F50BA4E8E73333762FE76 /* UserSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSettings.swift; sourceTree = "<group>"; };
 		206BC0559B439A25B8D80660 /* BoozeBlocker.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = BoozeBlocker.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -227,6 +229,7 @@
 			isa = PBXGroup;
 			children = (
 				A21C42D58F669596657F867B /* DeepLinkServiceTests.swift */,
+				18A5E0142987C5D16A6D6E17 /* ProtectionManagerTests.swift */,
 				58EE2D6BCAA37DBEA7781476 /* ProtectionSessionTests.swift */,
 				7319CB2B26B7A1F2BE233816 /* SobrietyTestServiceTests.swift */,
 			);
@@ -652,6 +655,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5BB5FC7E6C0F516299B7C726 /* DeepLinkServiceTests.swift in Sources */,
+				9838F37B154992A1E7D68EFA /* ProtectionManagerTests.swift in Sources */,
 				8BE818FB4766554E0C2AE568 /* ProtectionSessionTests.swift in Sources */,
 				F846F5D7592C5EEF4E30CA17 /* SobrietyTestServiceTests.swift in Sources */,
 			);
