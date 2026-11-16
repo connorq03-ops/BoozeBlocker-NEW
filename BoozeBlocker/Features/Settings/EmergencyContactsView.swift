@@ -17,9 +17,9 @@ struct EmergencyContactsView: View {
                         .foregroundColor(.green)
                     
                     VStack(alignment: .leading, spacing: 4) {
-                        Text("Always Accessible")
+                        Text("Your Emergency List")
                             .fontWeight(.semibold)
-                        Text("These contacts can always be reached, even when protection is active.")
+                        Text("iOS can't block individual contacts. Blocking Messages or WhatsApp affects everyone in that app, including these contacts. Phone and emergency calls remain available.")
                             .font(.caption)
                             .foregroundColor(.secondary)
                     }

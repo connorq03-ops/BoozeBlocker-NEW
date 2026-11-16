@@ -12,6 +12,14 @@ final class OnboardingSmokeTests: XCTestCase {
         XCTAssertTrue(app.tabBars.buttons["Settings"].exists)
         XCTAssertTrue(app.tabBars.buttons["History"].exists)
 
+        app.buttons["Activate Protection"].tap()
+        app.buttons["4 hours"].firstMatch.tap()
+        XCTAssertTrue(app.staticTexts["PROTECTED"].waitForExistence(timeout: 3))
+        app.buttons["Stop Protection"].tap()
+        app.buttons["Take Sobriety Test"].tap()
+        XCTAssertTrue(app.staticTexts["Sobriety Check"].waitForExistence(timeout: 3))
+        XCTAssertTrue(app.buttons["Submit"].exists)
+
         let attachment = XCTAttachment(screenshot: app.screenshot())
         attachment.name = "phase1-tabs"
         attachment.lifetime = .keepAlways

@@ -2,6 +2,7 @@ import SwiftUI
 
 @main
 struct BoozeBlockerApp: App {
+    @Environment(\.scenePhase) private var scenePhase
     @UIApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
     @ObservedObject private var appearanceManager = AppearanceManager.shared
     @StateObject private var protectionManager: ProtectionManager
@@ -43,6 +44,12 @@ struct BoozeBlockerApp: App {
             .environmentObject(notificationService)
             .onAppear {
                 setupAppearance()
+            }
+            .onChange(of: scenePhase) { _, phase in
+                if phase == .active {
+                    screenTimeService.checkAuthorizationStatus()
+                    protectionManager.reconcile()
+                }
             }
         }
     }

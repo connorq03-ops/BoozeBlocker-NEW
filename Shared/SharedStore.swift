@@ -22,10 +22,7 @@ struct SharedStore {
     func loadCurrentSession() -> ProtectionSession? {
         guard let session = loadCurrentSessionReadOnly() else { return nil }
         if let end = session.scheduledEndTime, end < Date() {
-            var expired = session
-            expired.end(reason: .timerExpired)
-            addToSessionHistory(expired)
-            defaults.removeObject(forKey: SharedKeys.currentSession)
+            endCurrentSession(reason: .timerExpired)
             return nil
         }
         return session
@@ -49,5 +46,35 @@ struct SharedStore {
 
     func clearSessionHistory() {
         defaults.removeObject(forKey: SharedKeys.sessionHistory)
+    }
+
+    func endCurrentSession(reason: EndReason) {
+        guard var session = loadCurrentSessionReadOnly(), session.isActive else { return }
+        session.blockedAttempts.append(contentsOf: drainPendingAttempts())
+        session.end(reason: reason)
+        addToSessionHistory(session)
+        saveCurrentSession(nil)
+    }
+
+    func appendPendingAttempt(type: AttemptType, targetName: String, targetIdentifier: String,
+                              outcome: AttemptOutcome = .blocked) {
+        var attempts = loadPendingAttempts()
+        attempts.append(BlockedAttempt(attemptType: type, targetName: targetName,
+                                       targetIdentifier: targetIdentifier, outcome: outcome))
+        if let data = try? JSONEncoder().encode(attempts) {
+            defaults.set(data, forKey: SharedKeys.pendingAttempts)
+        }
+    }
+
+    func drainPendingAttempts() -> [BlockedAttempt] {
+        let attempts = loadPendingAttempts()
+        defaults.removeObject(forKey: SharedKeys.pendingAttempts)
+        return attempts
+    }
+
+    private func loadPendingAttempts() -> [BlockedAttempt] {
+        guard let data = defaults.data(forKey: SharedKeys.pendingAttempts),
+              let attempts = try? JSONDecoder().decode([BlockedAttempt].self, from: data) else { return [] }
+        return attempts
     }
 }

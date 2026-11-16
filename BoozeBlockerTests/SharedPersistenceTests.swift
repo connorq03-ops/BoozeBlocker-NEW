@@ -20,7 +20,7 @@ final class SharedPersistenceTests: XCTestCase {
 
     func testPersistenceRoundTrip() throws {
         let service = PersistenceService(defaults: defaults(), legacy: defaults())
-        let settings = UserSettings(blockedAppBundleIDs: ["com.example.app"], defaultDuration: 14400)
+        let settings = UserSettings(defaultDuration: 14400)
         let session = ProtectionSession(scheduledEndTime: Date().addingTimeInterval(14400))
         service.saveUserSettings(settings)
         service.saveCurrentSession(session)
@@ -37,7 +37,7 @@ final class SharedPersistenceTests: XCTestCase {
     func testMigrationCopiesExistingKeysOnlyAndDoesNotRepeat() {
         let shared = defaults()
         let legacy = defaults()
-        let keys = [SharedKeys.userSettings, SharedKeys.currentSession, SharedKeys.sessionHistory, SharedKeys.blockedContacts, "blockedApps"]
+        let keys = [SharedKeys.userSettings, SharedKeys.currentSession, SharedKeys.sessionHistory, SharedKeys.blockedContacts]
         for key in keys { legacy.set(Data(key.utf8), forKey: key) }
         _ = PersistenceService(defaults: shared, legacy: legacy)
         XCTAssertTrue(shared.bool(forKey: SharedKeys.migratedFromStandard))
@@ -59,7 +59,7 @@ final class SharedPersistenceTests: XCTestCase {
     func testResetRemovesMigratedKeysFromBothStores() {
         let shared = defaults()
         let legacy = defaults()
-        let keys = [SharedKeys.userSettings, SharedKeys.currentSession, SharedKeys.sessionHistory, SharedKeys.blockedContacts, "blockedApps"]
+        let keys = [SharedKeys.userSettings, SharedKeys.currentSession, SharedKeys.sessionHistory, SharedKeys.blockedContacts]
         for key in keys { legacy.set(Data(key.utf8), forKey: key) }
         let service = PersistenceService(defaults: shared, legacy: legacy)
         for key in keys {
@@ -92,10 +92,11 @@ final class SharedPersistenceTests: XCTestCase {
     func testSettingsDecodeOldAndEmptyJSON() throws {
         let old = Data(#"{"hasCompletedOnboarding":true,"blockedAppBundleIDs":["com.example.app"]}"#.utf8)
         let settings = try JSONDecoder().decode(UserSettings.self, from: old)
-        XCTAssertEqual(settings.blockedAppBundleIDs, ["com.example.app"])
+        XCTAssertEqual(settings, UserSettings())
         XCTAssertEqual(settings.defaultDuration, UserSettings().defaultDuration)
         XCTAssertEqual(try JSONDecoder().decode(UserSettings.self, from: Data("{}".utf8)), UserSettings())
-        XCTAssertThrowsError(try JSONDecoder().decode(UserSettings.self, from: Data(#"{"blockedAppBundleIDs":false}"#.utf8)))
+        XCTAssertEqual(try JSONDecoder().decode(UserSettings.self, from: Data(#"{"blockedAppBundleIDs":false}"#.utf8)), UserSettings())
+        XCTAssertThrowsError(try JSONDecoder().decode(UserSettings.self, from: Data(#"{"blockedContactIDs":false}"#.utf8)))
     }
 
     func testStoreEmptyCorruptExpiredAndHistoryCap() throws {
@@ -158,7 +159,8 @@ final class SharedPersistenceTests: XCTestCase {
         XCTAssertEqual(store.loadSessionHistory().first?.endReason, .timerExpired)
     }
 
-    func testExtendSessionAddsTwoHours() throws {
+    @MainActor
+    func testExtendSessionAddsTwoHours() async throws {
         let service = PersistenceService(defaults: defaults(), legacy: defaults())
         let manager = ProtectionManager(persistence: service)
         manager.extendSession(by: 7200)
@@ -166,6 +168,7 @@ final class SharedPersistenceTests: XCTestCase {
         manager.activateProtection()
         manager.extendSession(by: 7200)
         XCTAssertNil(manager.currentSession?.scheduledEndTime)
+        manager.deactivateProtection(reason: .manualStop)
         manager.activateProtection(duration: 14400)
         defer { manager.deactivateProtection(reason: .manualStop) }
         let end = try XCTUnwrap(manager.currentSession?.scheduledEndTime)
@@ -175,7 +178,8 @@ final class SharedPersistenceTests: XCTestCase {
         XCTAssertEqual(try XCTUnwrap(manager.timeRemaining), 21600, accuracy: 2)
     }
 
-    func testFourHourSharedSessionAndMinuteEntries() throws {
+    @MainActor
+    func testFourHourSharedSessionAndMinuteEntries() async throws {
         let manager = ProtectionManager.shared
         manager.activateProtection(duration: 4 * 3600)
         defer { manager.deactivateProtection(reason: .manualStop) }

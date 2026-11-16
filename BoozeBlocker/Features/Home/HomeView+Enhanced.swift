@@ -3,9 +3,7 @@ import SwiftUI
 /// Enhanced home view with all components
 struct EnhancedHomeView: View {
     @EnvironmentObject var protectionManager: ProtectionManager
-    @State private var showDurationPicker = false
     @State private var showDeactivateConfirm = false
-    @State private var showSobrietyTest = false
     @State private var sessions: [ProtectionSession] = []
     
     private let persistence = PersistenceService.shared
@@ -28,7 +26,7 @@ struct EnhancedHomeView: View {
                             if let duration = duration {
                                 protectionManager.activateProtection(duration: duration)
                             } else {
-                                showDurationPicker = true
+                                protectionManager.showDurationPicker = true
                             }
                         }
                         .padding(.horizontal)
@@ -56,19 +54,19 @@ struct EnhancedHomeView: View {
                 loadSessions()
             }
         }
-        .sheet(isPresented: $showDurationPicker) {
+        .sheet(isPresented: $protectionManager.showDurationPicker) {
             DurationPickerSheet { duration in
                 protectionManager.activateProtection(duration: duration)
-                showDurationPicker = false
+                protectionManager.showDurationPicker = false
             }
             .presentationDetents([.medium])
         }
-        .sheet(isPresented: $showSobrietyTest) {
+        .sheet(isPresented: $protectionManager.showSobrietyTest) {
             SobrietyTestView { passed in
                 if passed {
                     protectionManager.deactivateProtection(reason: .sobrietyTestPassed)
                 }
-                showSobrietyTest = false
+                protectionManager.showSobrietyTest = false
             }
         }
         .confirmationDialog(
@@ -76,9 +74,10 @@ struct EnhancedHomeView: View {
             isPresented: $showDeactivateConfirm,
             titleVisibility: .visible
         ) {
-            Button("Take Sobriety Test", role: .destructive) {
-                showSobrietyTest = true
+            Button(protectionManager.sobrietyTestButtonTitle, role: .destructive) {
+                protectionManager.requestSobrietyTest()
             }
+            .disabled(protectionManager.sobrietyCooldownRemaining > 0)
             Button("Cancel", role: .cancel) {}
         } message: {
             Text("You'll need to pass a sobriety test to deactivate protection.")
@@ -103,7 +102,7 @@ struct EnhancedHomeView: View {
             if protectionManager.isProtectionActive {
                 showDeactivateConfirm = true
             } else {
-                showDurationPicker = true
+                protectionManager.showDurationPicker = true
             }
         } label: {
             HStack(spacing: 12) {

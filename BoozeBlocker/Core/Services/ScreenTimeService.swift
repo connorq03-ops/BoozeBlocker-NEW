@@ -1,147 +1,76 @@
 import Foundation
 import Combine
+import FamilyControls
 
-/// Service for managing Screen Time API integration
-/// Note: Actual Screen Time API requires FamilyControls framework and special entitlements
-class ScreenTimeService: ObservableObject {
+@MainActor
+final class ScreenTimeService: ObservableObject, BlockingController {
     static let shared = ScreenTimeService()
-    
-    // MARK: - Published Properties
-    
-    @Published private(set) var isAuthorized: Bool = false
-    @Published private(set) var blockedAppTokens: Set<String> = []
-    @Published private(set) var isBlocking: Bool = false
-    
-    // MARK: - Private Properties
-    
-    private let persistence = PersistenceService.shared
-    
-    private init() {
-        checkAuthorizationStatus()
+    @Published private(set) var authorizationStatus: AuthorizationStatus
+    @Published private(set) var isBlocking = false
+    @Published private(set) var lastError: String?
+    @Published var selection: FamilyActivitySelection {
+        didSet { controller.selection = selection }
     }
-    
-    // MARK: - Authorization
-    
-    /// Check if Screen Time access is authorized
+
+    private let controller: BlockingController
+
+    init(controller: BlockingController? = nil) {
+        let resolved: BlockingController
+        if let controller {
+            resolved = controller
+        } else {
+            #if targetEnvironment(simulator)
+            resolved = NoopBlockingController()
+            #else
+            resolved = ScreenTimeBlockingController()
+            #endif
+        }
+        self.controller = resolved
+        authorizationStatus = resolved.authorizationStatus
+        selection = resolved.selection
+        isBlocking = resolved.isBlocking
+    }
+
     func checkAuthorizationStatus() {
-        // In real implementation:
-        // AuthorizationCenter.shared.authorizationStatus
-        
-        // For now, simulate based on user defaults
-        isAuthorized = UserDefaults.standard.bool(forKey: "screenTimeAuthorized")
+        authorizationStatus = controller.authorizationStatus
+        if !isAuthorized { controller.stopBlocking() }
+        isBlocking = controller.isBlocking
     }
-    
-    /// Request Screen Time authorization
-    /// Returns true if authorized
+
+    @discardableResult
     func requestAuthorization() async -> Bool {
-        // In real implementation:
-        // try await AuthorizationCenter.shared.requestAuthorization(for: .individual)
-        
-        // Simulate authorization request
-        await MainActor.run {
-            // In real app, this would show system prompt
-            isAuthorized = true
-            UserDefaults.standard.set(true, forKey: "screenTimeAuthorized")
-        }
-        
-        return isAuthorized
+        let authorized = await controller.requestAuthorization()
+        checkAuthorizationStatus()
+        return authorized
     }
-    
-    // MARK: - App Blocking
-    
-    /// Start blocking the configured apps
-    func startBlocking() {
-        guard isAuthorized else {
-            print("Screen Time not authorized")
-            return
+
+    func startBlocking(until endDate: Date?) throws {
+        lastError = nil
+        defer { refreshState() }
+        do { try controller.startBlocking(until: endDate) }
+        catch {
+            lastError = error.localizedDescription
+            throw error
         }
-        
-        let settings = persistence.loadUserSettings()
-        let blockedBundleIDs = Set(settings.blockedAppBundleIDs)
-        
-        // In real implementation:
-        // 1. Create ManagedSettingsStore
-        // 2. Set shield configuration
-        // 3. Apply app restrictions
-        
-        /*
-        let store = ManagedSettingsStore()
-        store.shield.applications = blockedAppTokens
-        store.shield.applicationCategories = .specific(blockedCategories)
-        */
-        
-        blockedAppTokens = blockedBundleIDs
-        isBlocking = true
-        
-        print("Started blocking \(blockedBundleIDs.count) apps")
-        
-        NotificationCenter.default.post(name: .appBlockingStarted, object: nil)
     }
-    
-    /// Stop blocking all apps
+
     func stopBlocking() {
-        // In real implementation:
-        // let store = ManagedSettingsStore()
-        // store.clearAllSettings()
-        
-        blockedAppTokens = []
-        isBlocking = false
-        
-        print("Stopped blocking apps")
-        
-        NotificationCenter.default.post(name: .appBlockingStopped, object: nil)
+        controller.stopBlocking()
+        refreshState()
     }
-    
-    /// Check if a specific app is currently blocked
-    func isAppBlocked(bundleIdentifier: String) -> Bool {
-        return isBlocking && blockedAppTokens.contains(bundleIdentifier)
-    }
-    
-    /// Temporarily allow an app for a specified duration
-    func temporarilyAllowApp(bundleIdentifier: String, duration: TimeInterval) {
-        guard isBlocking else { return }
-        
-        // Remove from blocked set temporarily
-        blockedAppTokens.remove(bundleIdentifier)
-        
-        // Schedule re-blocking
-        DispatchQueue.main.asyncAfter(deadline: .now() + duration) { [weak self] in
-            guard let self = self, self.isBlocking else { return }
-            self.blockedAppTokens.insert(bundleIdentifier)
-            
-            NotificationCenter.default.post(
-                name: .appTemporaryAccessExpired,
-                object: bundleIdentifier
-            )
+
+    func reconcile(sessionActive: Bool, endDate: Date?) throws {
+        lastError = nil
+        defer { refreshState() }
+        do { try controller.reconcile(sessionActive: sessionActive, endDate: endDate) }
+        catch {
+            lastError = error.localizedDescription
+            throw error
         }
-        
-        print("Temporarily allowed \(bundleIdentifier) for \(duration) seconds")
     }
-}
 
-// MARK: - Notification Names
-
-extension Notification.Name {
-    static let appBlockingStarted = Notification.Name("appBlockingStarted")
-    static let appBlockingStopped = Notification.Name("appBlockingStopped")
-    static let appTemporaryAccessExpired = Notification.Name("appTemporaryAccessExpired")
-}
-
-// MARK: - Shield Configuration (for future implementation)
-
-/// Configuration for the shield view shown when a blocked app is opened
-struct ShieldConfiguration {
-    let title: String
-    let subtitle: String
-    let primaryButtonTitle: String
-    let secondaryButtonTitle: String?
-    let icon: String
-    
-    static let `default` = ShieldConfiguration(
-        title: "App Blocked",
-        subtitle: "This app is blocked while you're protected",
-        primaryButtonTitle: "Stay Protected",
-        secondaryButtonTitle: "Request Access",
-        icon: "shield.checkmark.fill"
-    )
+    private func refreshState() {
+        authorizationStatus = controller.authorizationStatus
+        isBlocking = controller.isBlocking
+    }
 }

@@ -12,7 +12,7 @@ struct DurationOption: Identifiable {
         DurationOption(
             title: "Until 8:00 AM",
             subtitle: "Perfect for a night out",
-            duration: Date.timeUntil(hour: 8),
+            duration: Date.timeUntil(hour: 8, minimumDuration: 3600),
             icon: "sunrise.fill"
         ),
         DurationOption(
