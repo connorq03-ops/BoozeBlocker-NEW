@@ -39,6 +39,10 @@
 	<string>Booze Blocker needs access to your contacts so you can select which people to block while drinking and designate emergency contacts.</string>
 	<key>NSFaceIDUsageDescription</key>
 	<string>Use Face ID to quickly unlock the app or verify your identity for sensitive actions.</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Allow the optional location-trigger prototype to monitor saved places when the app is not open.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Location is used by the optional location-trigger prototype to identify nearby saved places.</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
