@@ -1,0 +1,40 @@
+name: iOS
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  build-and-test:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install XcodeGen
+        run: brew install xcodegen
+      - name: Verify generated project
+        run: xcodegen generate && git diff --exit-code
+      - name: Resolve iPhone simulator
+        shell: bash
+        run: |
+          set -euo pipefail
+          UDID=$(xcrun simctl list devices available -j | python3 -c '
+          import json, sys
+          devices = json.load(sys.stdin)["devices"]
+          iphones = [d for runtime, group in devices.items() if "iOS" in runtime
+                     for d in group if d.get("isAvailable") and d["name"].startswith("iPhone")]
+          if not iphones:
+              sys.exit("No available iPhone simulator found; install an iOS simulator runtime.")
+          print(iphones[0]["udid"])
+          ')
+          echo "Selected iPhone simulator: $UDID"
+          echo "UDID=$UDID" >> "$GITHUB_ENV"
+      - name: Build for simulator
+        run: xcodebuild build -project BoozeBlocker.xcodeproj -scheme BoozeBlocker -destination "id=$UDID" CODE_SIGNING_ALLOWED=NO
+      - name: Unit and UI tests
+        run: xcodebuild test -project BoozeBlocker.xcodeproj -scheme BoozeBlocker -destination "id=$UDID" CODE_SIGNING_ALLOWED=NO
+      - name: Build for iOS device
+        run: xcodebuild build -project BoozeBlocker.xcodeproj -scheme BoozeBlocker -destination 'generic/platform=iOS' CODE_SIGNING_ALLOWED=NO
