@@ -14,10 +14,12 @@
 		0C0C47102996E9B08685531B /* ManagedSettings+Names.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4C866AC05F0BD242F23398D /* ManagedSettings+Names.swift */; };
 		0D0D82C48BCE55B82E177A4C /* ScreenTimeService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4CE76C2CF78731F39FAC1B3 /* ScreenTimeService.swift */; };
 		132DA50A636B16F1F9EDF023 /* OuraService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783FEEFD31C1C9C8C7D4753E /* OuraService.swift */; };
+		136210A9099624B1A20292EF /* SessionEndedNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4675559D6D3617577EFB0201 /* SessionEndedNotification.swift */; };
 		1B05E96E93F97499EAC3E7F4 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E025C880F20279D8C21F26B /* OnboardingView.swift */; };
 		1B94EB65B15CCEDAA3C0A49B /* SharedStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B86236AD5F49DF7556B39E /* SharedStore.swift */; };
 		1E0117B4420E232523FD7D27 /* BlockedAttempt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B01186EF5877E84C6285F92 /* BlockedAttempt.swift */; };
 		258FFFBA1A81D2A8107ADA63 /* ProtectionEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 295D70327A933AF7EFCE46FC /* ProtectionEntry.swift */; };
+		29BA3330DE4052E1B6B3EF18 /* SessionEndedNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4675559D6D3617577EFB0201 /* SessionEndedNotification.swift */; };
 		2B3756A4BECE194B01149EEE /* ProtectionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38BB23E5D74A9D19F876D266 /* ProtectionManager.swift */; };
 		2CBF08BD54D06352D16FCE0F /* InsightsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BA3085001E46412D1DDAB6F /* InsightsView.swift */; };
 		3307BE01A2F2ECDAD0EAE393 /* BiometricService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 509B8DC6354412E3CB2D3557 /* BiometricService.swift */; };
@@ -28,6 +30,7 @@
 		405C689A776DB89F4F00AE42 /* LocationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34E8E8B1C4C2EF46B4E12BF3 /* LocationService.swift */; };
 		4128E9619D951C6626FC74AC /* ShieldConfigurationExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C402A7034B860AEAA7255C3 /* ShieldConfigurationExtension.swift */; };
 		4255A62A9B337AD53008A11F /* ShieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5E0FF3992ECEBDD29235746 /* ShieldView.swift */; };
+		42E7FF1A24A9825E52468A5F /* SessionEndedNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4675559D6D3617577EFB0201 /* SessionEndedNotification.swift */; };
 		4318167A6760894AFCD8619A /* Date+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEAE7B2A461C494FEA10EA76 /* Date+Extensions.swift */; };
 		4330638552C4AB4D9840559E /* ManagedSettings+Names.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4C866AC05F0BD242F23398D /* ManagedSettings+Names.swift */; };
 		4583D46E2186830A9D6B0F79 /* AppGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = C705750F4B15721646525B13 /* AppGroup.swift */; };
@@ -86,6 +89,8 @@
 		B86C834F6A23C21902A467CA /* PlaidService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84A22DDB6BE1D7336305CA97 /* PlaidService.swift */; };
 		B8AC2D6ABA93A46B9CC703AE /* MathTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BA3AC77862D1C5061AFDDAE /* MathTestView.swift */; };
 		BA0EE5D6DE50B4E6123B7790 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = A459FE0B4C08A0033E6B2008 /* PrivacyInfo.xcprivacy */; };
+		BF485C2B09E878969D76169C /* SessionEndedNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4675559D6D3617577EFB0201 /* SessionEndedNotification.swift */; };
+		C188781B6A0F40F891AE3A27 /* SessionEndedNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4675559D6D3617577EFB0201 /* SessionEndedNotification.swift */; };
 		C4FB84967DBBA1A227B79ED3 /* SharedStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B86236AD5F49DF7556B39E /* SharedStore.swift */; };
 		C60AF82FD33CDA1AD518836F /* AppGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = C705750F4B15721646525B13 /* AppGroup.swift */; };
 		CF352E862B9A8DE098B6B669 /* ReactionTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16FBD093B86ABA2F11366EF7 /* ReactionTestView.swift */; };
@@ -201,6 +206,7 @@
 		3D3100EEDB2DEF3162A7D704 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		3EE97EFFDCE0E75472684F27 /* BoozeBlocker.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BoozeBlocker.entitlements; sourceTree = "<group>"; };
 		4305467152571B3E8DCEF04E /* IntegrationsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntegrationsView.swift; sourceTree = "<group>"; };
+		4675559D6D3617577EFB0201 /* SessionEndedNotification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionEndedNotification.swift; sourceTree = "<group>"; };
 		47BE187C3C03EF08EAF7E4AE /* DeepLinkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeepLinkService.swift; sourceTree = "<group>"; };
 		4B01186EF5877E84C6285F92 /* BlockedAttempt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockedAttempt.swift; sourceTree = "<group>"; };
 		4BA3AC77862D1C5061AFDDAE /* MathTestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MathTestView.swift; sourceTree = "<group>"; };
@@ -548,6 +554,7 @@
 				C705750F4B15721646525B13 /* AppGroup.swift */,
 				A4C866AC05F0BD242F23398D /* ManagedSettings+Names.swift */,
 				295D70327A933AF7EFCE46FC /* ProtectionEntry.swift */,
+				4675559D6D3617577EFB0201 /* SessionEndedNotification.swift */,
 				51B86236AD5F49DF7556B39E /* SharedStore.swift */,
 				EEBDDECB0A96462461913C4F /* Models */,
 			);
@@ -801,6 +808,7 @@
 				0C0C47102996E9B08685531B /* ManagedSettings+Names.swift in Sources */,
 				A5E2D44670781DAA6520597B /* ProtectionEntry.swift in Sources */,
 				0A87CC783B967968B7EE98F7 /* ProtectionSession.swift in Sources */,
+				C188781B6A0F40F891AE3A27 /* SessionEndedNotification.swift in Sources */,
 				C4FB84967DBBA1A227B79ED3 /* SharedStore.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -814,6 +822,7 @@
 				813017F13B981E3D3CB85F9E /* ManagedSettings+Names.swift in Sources */,
 				96C9E17C0FC1CFEDA19FE46F /* ProtectionEntry.swift in Sources */,
 				69F7C3CD2CA000E388F5DAA1 /* ProtectionSession.swift in Sources */,
+				29BA3330DE4052E1B6B3EF18 /* SessionEndedNotification.swift in Sources */,
 				1B94EB65B15CCEDAA3C0A49B /* SharedStore.swift in Sources */,
 				95E9D895839A7E083BEAF171 /* ShieldActionExtension.swift in Sources */,
 			);
@@ -870,6 +879,7 @@
 				88B6C3355DA03207FC6C78BD /* RecentActivityCard.swift in Sources */,
 				F220DDB6EEFDD94084BC8C6E /* ScheduleSettingsView.swift in Sources */,
 				0D0D82C48BCE55B82E177A4C /* ScreenTimeService.swift in Sources */,
+				42E7FF1A24A9825E52468A5F /* SessionEndedNotification.swift in Sources */,
 				8DFF50D37183092794F53247 /* SettingsView.swift in Sources */,
 				E981935C555610810D2D9232 /* SharedStore.swift in Sources */,
 				4255A62A9B337AD53008A11F /* ShieldView.swift in Sources */,
@@ -902,6 +912,7 @@
 				6847CC5C93A57E0DD944E615 /* BoozeBlockerWidgetBundle.swift in Sources */,
 				D3E6CAF0E459131DDC2E1911 /* ProtectionEntry.swift in Sources */,
 				F5C914171C4D696BECC4A6A6 /* ProtectionSession.swift in Sources */,
+				BF485C2B09E878969D76169C /* SessionEndedNotification.swift in Sources */,
 				4B73DED37F9CB988D4BCDEEA /* SharedStore.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -915,6 +926,7 @@
 				0098B54585B0AFCBB0B4011F /* ManagedSettings+Names.swift in Sources */,
 				258FFFBA1A81D2A8107ADA63 /* ProtectionEntry.swift in Sources */,
 				5535BDAAE9DBB73CEF1D4305 /* ProtectionSession.swift in Sources */,
+				136210A9099624B1A20292EF /* SessionEndedNotification.swift in Sources */,
 				F75F1BA29980F190EB8E44BA /* SharedStore.swift in Sources */,
 				4128E9619D951C6626FC74AC /* ShieldConfigurationExtension.swift in Sources */,
 			);

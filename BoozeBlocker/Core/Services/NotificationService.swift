@@ -149,25 +149,7 @@ class NotificationService: ObservableObject {
     /// Notify when protection has ended
     func notifySessionEnded(blockedAttempts: Int) {
         guard isAuthorized else { return }
-        
-        let content = UNMutableNotificationContent()
-        content.title = "Protection Ended"
-        
-        if blockedAttempts > 0 {
-            content.body = "You blocked \(blockedAttempts) attempt\(blockedAttempts == 1 ? "" : "s") last night!"
-        } else {
-            content.body = "Great job! No blocked attempts during your session."
-        }
-        
-        content.sound = .default
-        
-        let request = UNNotificationRequest(
-            identifier: "session_ended",
-            content: content,
-            trigger: nil
-        )
-        
-        center.add(request)
+        center.add(SessionEndedNotification.request(blockedAttempts: blockedAttempts))
     }
     
     /// Schedule a reminder to activate protection

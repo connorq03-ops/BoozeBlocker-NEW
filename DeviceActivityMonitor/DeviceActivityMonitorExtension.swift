@@ -6,6 +6,6 @@ final class DeviceActivityMonitorExtension: DeviceActivityMonitor {
         super.intervalDidEnd(for: activity)
         guard activity == .protectionSession else { return }
         ManagedSettingsStore(named: .protection).clearAllSettings()
-        SharedStore(defaults: AppGroup.defaults).endCurrentSession(reason: .timerExpired)
+        SessionEndedNotification.endSession(in: SharedStore(defaults: AppGroup.defaults))
     }
 }

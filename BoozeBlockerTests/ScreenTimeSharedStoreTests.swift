@@ -1,4 +1,5 @@
 import XCTest
+import UserNotifications
 @testable import BoozeBlocker
 
 private final class DrainedAttempts: @unchecked Sendable {
@@ -160,6 +161,48 @@ final class ScreenTimeSharedStoreTests: XCTestCase {
         XCTAssertEqual(store.endCurrentSession(reason: .timerExpired)?.id, session.id)
         XCTAssertNil(store.updateCurrentSession(id: session.id) { $0.scheduledEndTime = Date() })
         XCTAssertNil(store.endCurrentSession(reason: .manualStop))
+    }
+
+    func testSessionEndedNotificationMatchesAppCopyForAllCounts() {
+        for (count, body) in [
+            (0, "Great job! No blocked attempts during your session."),
+            (1, "You blocked 1 attempt last night!"),
+            (2, "You blocked 2 attempts last night!")
+        ] {
+            let request = SessionEndedNotification.request(blockedAttempts: count)
+            XCTAssertEqual(request.identifier, "session_ended")
+            XCTAssertEqual(request.content.title, "Protection Ended")
+            XCTAssertEqual(request.content.body, body)
+            XCTAssertNotNil(request.content.sound)
+            XCTAssertNil(request.trigger)
+        }
+    }
+
+    func testExtensionPostsOnceWithArchivedAndPendingAttemptCount() {
+        let store = store()
+        var session = ProtectionSession()
+        session.addBlockedAttempt(BlockedAttempt(attemptType: .app, targetName: "App", targetIdentifier: "ingested"))
+        store.saveCurrentSession(session)
+        store.appendPendingAttempt(type: .app, targetName: "App", targetIdentifier: "pending")
+        var requests: [UNNotificationRequest] = []
+        SessionEndedNotification.endSession(in: store) { requests.append($0) }
+        SessionEndedNotification.endSession(in: store) { requests.append($0) }
+        XCTAssertEqual(requests.count, 1)
+        XCTAssertEqual(requests.first?.content.body, "You blocked 2 attempts last night!")
+        XCTAssertEqual(store.loadSessionHistory().first?.blockedAttempts.count, 2)
+        XCTAssertNil(store.endCurrentSession(reason: .manualStop, expectedSessionID: session.id))
+    }
+
+    func testExtensionDoesNotNotifyWhenAppAlreadyEndedOrSessionIsMissingOrCorrupt() {
+        let store = store()
+        let session = ProtectionSession()
+        store.saveCurrentSession(session)
+        XCTAssertNotNil(store.endCurrentSession(reason: .sobrietyTestPassed, expectedSessionID: session.id))
+        SessionEndedNotification.endSession(in: store) { _ in XCTFail("App already ended the session") }
+        store.defaults.set(Data("invalid".utf8), forKey: SharedKeys.currentSession)
+        SessionEndedNotification.endSession(in: store) { _ in XCTFail("Corrupt session must not notify") }
+        store.saveCurrentSession(nil)
+        SessionEndedNotification.endSession(in: store) { _ in XCTFail("Missing session must not notify") }
     }
 
     func testConcurrentAppendsAndDrainsAcrossStoreInstancesAreNotLostOrDuplicated() {
