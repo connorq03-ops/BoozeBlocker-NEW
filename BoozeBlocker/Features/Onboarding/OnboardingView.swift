@@ -8,7 +8,7 @@ struct OnboardingView: View {
         OnboardingPage(
             title: "Welcome to Booze Blocker",
             subtitle: "Protect yourself from drunk texting, calling, and app usage",
-            imageName: "shield.checkmark.fill",
+            imageName: "checkmark.shield.fill",
             imageColor: .blue
         ),
         OnboardingPage(

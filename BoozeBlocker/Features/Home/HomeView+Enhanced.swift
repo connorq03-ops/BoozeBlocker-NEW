@@ -106,7 +106,7 @@ struct EnhancedHomeView: View {
             }
         } label: {
             HStack(spacing: 12) {
-                Image(systemName: protectionManager.isProtectionActive ? "stop.fill" : "shield.checkmark.fill")
+                Image(systemName: protectionManager.isProtectionActive ? "stop.fill" : "checkmark.shield.fill")
                     .font(.title3)
                 
                 Text(protectionManager.isProtectionActive ? "Stop Protection" : "Activate Protection")

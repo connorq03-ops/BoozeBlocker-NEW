@@ -90,7 +90,7 @@ struct MorningSummaryView: View {
             )
             
             SummaryStatCard(
-                icon: "shield.checkmark.fill",
+                icon: "checkmark.shield.fill",
                 value: session.blockedAttempts.isEmpty ? "100%" : "\(successRate)%",
                 label: "Success",
                 color: .green

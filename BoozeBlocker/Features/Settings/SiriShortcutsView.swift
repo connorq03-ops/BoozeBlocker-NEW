@@ -85,7 +85,7 @@ struct ShortcutItem: Identifiable {
         ShortcutItem(
             title: "Activate Protection",
             subtitle: "Start protection with default duration",
-            icon: "shield.checkmark.fill",
+            icon: "checkmark.shield.fill",
             suggestedPhrase: "Activate Booze Blocker",
             activityType: "com.boozeblocker.activate",
             color: .green

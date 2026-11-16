@@ -2,6 +2,14 @@ import SwiftUI
 
 /// Settings view for third-party integrations
 struct IntegrationsView: View {
+    var body: some View {
+        if FeatureFlags.integrationsEnabled {
+            EnabledIntegrationsView()
+        }
+    }
+}
+
+private struct EnabledIntegrationsView: View {
     @StateObject private var ouraService = OuraService.shared
     @StateObject private var plaidService = PlaidService.shared
     @StateObject private var locationService = LocationService.shared
@@ -215,6 +223,14 @@ struct PrivacyNoteRow: View {
 }
 
 struct SavedLocationsView: View {
+    var body: some View {
+        if FeatureFlags.integrationsEnabled {
+            EnabledSavedLocationsView()
+        }
+    }
+}
+
+private struct EnabledSavedLocationsView: View {
     @StateObject private var locationService = LocationService.shared
     @State private var showAddLocation = false
     
@@ -291,6 +307,14 @@ struct SavedLocationsView: View {
 }
 
 struct AddLocationView: View {
+    var body: some View {
+        if FeatureFlags.integrationsEnabled {
+            EnabledAddLocationView()
+        }
+    }
+}
+
+private struct EnabledAddLocationView: View {
     @Environment(\.dismiss) private var dismiss
     @StateObject private var locationService = LocationService.shared
     
