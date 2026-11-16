@@ -3,62 +3,725 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 56;
+	objectVersion = 77;
 	objects = {
 
-/* Begin PBXGroup section */
-		00000000000000000000001 = {
-			isa = PBXGroup;
-			children = (
-				00000000000000000000002 /* BoozeBlocker */,
-			);
-			sourceTree = "<group>";
+/* Begin PBXBuildFile section */
+		0160E450FADFEAAC19083C75 /* DurationPickerSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 528735E53A32E040F1D8846A /* DurationPickerSheet.swift */; };
+		082D7F75FFC28110C89B4D62 /* BlockedAttempt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B01186EF5877E84C6285F92 /* BlockedAttempt.swift */; };
+		0D0D82C48BCE55B82E177A4C /* ScreenTimeService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4CE76C2CF78731F39FAC1B3 /* ScreenTimeService.swift */; };
+		132DA50A636B16F1F9EDF023 /* OuraService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783FEEFD31C1C9C8C7D4753E /* OuraService.swift */; };
+		1B05E96E93F97499EAC3E7F4 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E025C880F20279D8C21F26B /* OnboardingView.swift */; };
+		1E0117B4420E232523FD7D27 /* BlockedAttempt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B01186EF5877E84C6285F92 /* BlockedAttempt.swift */; };
+		2B3756A4BECE194B01149EEE /* ProtectionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38BB23E5D74A9D19F876D266 /* ProtectionManager.swift */; };
+		2CBF08BD54D06352D16FCE0F /* InsightsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BA3085001E46412D1DDAB6F /* InsightsView.swift */; };
+		3307BE01A2F2ECDAD0EAE393 /* BiometricService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 509B8DC6354412E3CB2D3557 /* BiometricService.swift */; };
+		34D00D4B81AA46C3989C62C8 /* DurationOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 518670B4BB6FA03B08809FB9 /* DurationOption.swift */; };
+		354E377E89BF08C7FF7F3BAC /* SobrietyTestService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B73238DE1B15FC1F011DEEC4 /* SobrietyTestService.swift */; };
+		38E9841F431FBD6EB83D2986 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3D3100EEDB2DEF3162A7D704 /* Assets.xcassets */; };
+		3D87E0F08F40DC6A82E21035 /* DeepLinkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47BE187C3C03EF08EAF7E4AE /* DeepLinkService.swift */; };
+		405C689A776DB89F4F00AE42 /* LocationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34E8E8B1C4C2EF46B4E12BF3 /* LocationService.swift */; };
+		4255A62A9B337AD53008A11F /* ShieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5E0FF3992ECEBDD29235746 /* ShieldView.swift */; };
+		4318167A6760894AFCD8619A /* Date+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEAE7B2A461C494FEA10EA76 /* Date+Extensions.swift */; };
+		47A1CFFCF2DA4CD5A3C055A3 /* QuickActionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 170143CB5E7C658E9A7C4768 /* QuickActionsView.swift */; };
+		4B73DED37F9CB988D4BCDEEA /* SharedStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B86236AD5F49DF7556B39E /* SharedStore.swift */; };
+		4D6726E37FE17660D3B0CAC7 /* HistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 090151B039405A6A3FE40BDA /* HistoryView.swift */; };
+		510BC67C8F7E9A2701023D5A /* AppearanceSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CF4BF563AF08D303DADF384 /* AppearanceSettingsView.swift */; };
+		54624CB629E12DB4E68DE47E /* HelpSupportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 079192E8B81ABAEDAF14FE8C /* HelpSupportView.swift */; };
+		59E619A21929F93F49373270 /* AppGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = C705750F4B15721646525B13 /* AppGroup.swift */; };
+		5BB5FC7E6C0F516299B7C726 /* DeepLinkServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A21C42D58F669596657F867B /* DeepLinkServiceTests.swift */; };
+		61927E463A521A806CEC3356 /* BlockedContactsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50BAAF14BF63E49448A3D19C /* BlockedContactsView.swift */; };
+		647106042EF42464E92F6E4D /* ContactsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E2107C64C3F81A69460A2D6 /* ContactsService.swift */; };
+		662632A480C03D2F605756E4 /* String+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E26BA4C755B402DA18071BC9 /* String+Extensions.swift */; };
+		6847CC5C93A57E0DD944E615 /* BoozeBlockerWidgetBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 848A88C6B3E7FDD16A7398E8 /* BoozeBlockerWidgetBundle.swift */; };
+		6ABD567BA4F032893A855BA4 /* StatusCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 603ABAC6C1E6181D4FB8C44C /* StatusCard.swift */; };
+		6C3A79FF6C79FD06378E566D /* MessagePreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 353FADA7DA99683573FEFE88 /* MessagePreviewView.swift */; };
+		6E1400C06AFE3BAD23938DA7 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = A459FE0B4C08A0033E6B2008 /* PrivacyInfo.xcprivacy */; };
+		6E21DC4862D643F6536351E8 /* PrivacySettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27A5490B5519178D9185515D /* PrivacySettingsView.swift */; };
+		83EF6DA9673AB70C142B3E4B /* TypingTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69E1C7E34ECF3818E263A5B2 /* TypingTestView.swift */; };
+		849C58A7E080415ED2A9023E /* EmergencyContactsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F91EBBC69FFB8DA05BC3AFC /* EmergencyContactsView.swift */; };
+		88B6C3355DA03207FC6C78BD /* RecentActivityCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF5BC0A6C11D8ACD7E4B7844 /* RecentActivityCard.swift */; };
+		8A7A6CB48428922CAE3C4716 /* PermissionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1B2BCAAE654B8873E42C4FC /* PermissionsView.swift */; };
+		8BE818FB4766554E0C2AE568 /* ProtectionSessionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58EE2D6BCAA37DBEA7781476 /* ProtectionSessionTests.swift */; };
+		8CC26A06C76A0C29458B54F3 /* ProtectionEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 295D70327A933AF7EFCE46FC /* ProtectionEntry.swift */; };
+		8D67AB0864BF383DD6E53DDD /* SharedPersistenceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9C120CDD38FEDF3A56715A9 /* SharedPersistenceTests.swift */; };
+		8DFF50D37183092794F53247 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 018C8418088906671AC14662 /* SettingsView.swift */; };
+		8EDE70E56FB330BD5C14A6E1 /* UserSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D5F50BA4E8E73333762FE76 /* UserSettings.swift */; };
+		8FF017569F13D336A67FE3DC /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = A459FE0B4C08A0033E6B2008 /* PrivacyInfo.xcprivacy */; };
+		91FF25E832DE9FFD4F647423 /* BalanceTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90AB04487A9A1E1D00194EDF /* BalanceTestView.swift */; };
+		9838F37B154992A1E7D68EFA /* ProtectionManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18A5E0142987C5D16A6D6E17 /* ProtectionManagerTests.swift */; };
+		98D8F9B23A2649E65071101C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2481948921B5F220EF28C1F /* AppDelegate.swift */; };
+		9C0C7E74A9B0A5160269505D /* SiriShortcutsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 959AA4F18AA29E2D545BECEB /* SiriShortcutsView.swift */; };
+		A156AB2E8721415E0E71CBE0 /* BlockedContact.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2FDA3FB36F1E6EBAAC4540D /* BlockedContact.swift */; };
+		A2F12C3B599DBF8CFEEB9DA8 /* HapticService.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFB516437CAFD350F8BDA698 /* HapticService.swift */; };
+		A697EB14063031E885A009C7 /* AppGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = C705750F4B15721646525B13 /* AppGroup.swift */; };
+		A6E711955C99781BEBFA5C65 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD00E9639B14D7A6F809D21E /* NotificationService.swift */; };
+		A7C074A3291887325FEC8343 /* AppearanceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B16AC66DEEB854FD5ED8796F /* AppearanceManager.swift */; };
+		A8440FA62A464E1AFABB0461 /* IntegrationsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4305467152571B3E8DCEF04E /* IntegrationsView.swift */; };
+		A905DAACD8089EB67FBC4F63 /* BoozeBlockerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD22A8BAD52323F272591B70 /* BoozeBlockerApp.swift */; };
+		A92B06663367F35714119181 /* View+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26EBFE6F86ACACE248466640 /* View+Extensions.swift */; };
+		A94818201E8A1002BF2F8FB8 /* MorningSummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D601482266641354761481D4 /* MorningSummaryView.swift */; };
+		B86C834F6A23C21902A467CA /* PlaidService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84A22DDB6BE1D7336305CA97 /* PlaidService.swift */; };
+		B8AC2D6ABA93A46B9CC703AE /* MathTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BA3AC77862D1C5061AFDDAE /* MathTestView.swift */; };
+		CF352E862B9A8DE098B6B669 /* ReactionTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16FBD093B86ABA2F11366EF7 /* ReactionTestView.swift */; };
+		D1AE364A5AAAFDAA9AA9D886 /* PersistenceService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65124308841E6E30B48813C5 /* PersistenceService.swift */; };
+		D3E6CAF0E459131DDC2E1911 /* ProtectionEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 295D70327A933AF7EFCE46FC /* ProtectionEntry.swift */; };
+		D6B5952A96E3EFDF60A58BAD /* BlockedApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD34488514780CD34784A7E2 /* BlockedApp.swift */; };
+		E58B2CC449F14820E3610BF4 /* BlockedAppsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4D75503A4FA5A6C6221C647 /* BlockedAppsView.swift */; };
+		E63B25A6D2555903DA784C75 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DE91D92670B8DDFE43D3A92 /* HomeView.swift */; };
+		E981935C555610810D2D9232 /* SharedStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B86236AD5F49DF7556B39E /* SharedStore.swift */; };
+		ED217000887B3EF17386CC87 /* SobrietyTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 952E3CA6CEB70FDC94111635 /* SobrietyTestView.swift */; };
+		ED595FD454571A15828F11C4 /* BoozeBlockerWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A7DC86FAD51EE027AC73FCD /* BoozeBlockerWidget.swift */; };
+		EE28726BF08FF951D7320BC2 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28EF35366D02C9404D83A322 /* ContentView.swift */; };
+		F220DDB6EEFDD94084BC8C6E /* ScheduleSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CABED0AAC2F2BBC03B8FA32 /* ScheduleSettingsView.swift */; };
+		F38B28ED08B4A54B0C530C80 /* HomeView+Enhanced.swift in Sources */ = {isa = PBXBuildFile; fileRef = F45AA5DAB67B025D80DDAC67 /* HomeView+Enhanced.swift */; };
+		F55B75002A59D9B701F127B9 /* OnboardingSmokeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBDE83755E649B860864095A /* OnboardingSmokeTests.swift */; };
+		F5C63469CACA0B837026C7FD /* BoozeBlockerWidget.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = D279A377045DF0E8BAA8C48D /* BoozeBlockerWidget.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		F5C914171C4D696BECC4A6A6 /* ProtectionSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2609971425951E3BA94610B5 /* ProtectionSession.swift */; };
+		F8079A1D4D768CFFF2A85192 /* ProtectionSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2609971425951E3BA94610B5 /* ProtectionSession.swift */; };
+		F846F5D7592C5EEF4E30CA17 /* SobrietyTestServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7319CB2B26B7A1F2BE233816 /* SobrietyTestServiceTests.swift */; };
+		FDF0B490BA25D4A707F66234 /* Color+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6F0969DB0DB21F48FF336E2 /* Color+Extensions.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		01B362D1C3574CB4D40110E1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = FECBC3F4E543ED9105CC3212 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 56CEA173BC657C9ECE7544BC;
+			remoteInfo = BoozeBlocker;
 		};
-		00000000000000000000002 /* BoozeBlocker */ = {
+		068595D70C75A278FE8A6AEA /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = FECBC3F4E543ED9105CC3212 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 56CEA173BC657C9ECE7544BC;
+			remoteInfo = BoozeBlocker;
+		};
+		E2A9DD5C02A37271F2F87BE3 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = FECBC3F4E543ED9105CC3212 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8D9FDE76AFE200793DF3D3C1;
+			remoteInfo = BoozeBlockerWidget;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		684B920C9BEB0D0A38650363 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				F5C63469CACA0B837026C7FD /* BoozeBlockerWidget.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		018C8418088906671AC14662 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		079192E8B81ABAEDAF14FE8C /* HelpSupportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelpSupportView.swift; sourceTree = "<group>"; };
+		090151B039405A6A3FE40BDA /* HistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryView.swift; sourceTree = "<group>"; };
+		16FBD093B86ABA2F11366EF7 /* ReactionTestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReactionTestView.swift; sourceTree = "<group>"; };
+		170143CB5E7C658E9A7C4768 /* QuickActionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickActionsView.swift; sourceTree = "<group>"; };
+		18A5E0142987C5D16A6D6E17 /* ProtectionManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProtectionManagerTests.swift; sourceTree = "<group>"; };
+		1CABED0AAC2F2BBC03B8FA32 /* ScheduleSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleSettingsView.swift; sourceTree = "<group>"; };
+		1D5F50BA4E8E73333762FE76 /* UserSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSettings.swift; sourceTree = "<group>"; };
+		206BC0559B439A25B8D80660 /* BoozeBlocker.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = BoozeBlocker.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		20AB281EC2F8E5885653536A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		2609971425951E3BA94610B5 /* ProtectionSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProtectionSession.swift; sourceTree = "<group>"; };
+		26EBFE6F86ACACE248466640 /* View+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Extensions.swift"; sourceTree = "<group>"; };
+		27A5490B5519178D9185515D /* PrivacySettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivacySettingsView.swift; sourceTree = "<group>"; };
+		28E2159AC574185946C00AF6 /* BoozeBlockerWidget.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BoozeBlockerWidget.entitlements; sourceTree = "<group>"; };
+		28EF35366D02C9404D83A322 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		295D70327A933AF7EFCE46FC /* ProtectionEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProtectionEntry.swift; sourceTree = "<group>"; };
+		325CC171BD931A7F9F0D6738 /* BoozeBlockerTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = BoozeBlockerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		34E8E8B1C4C2EF46B4E12BF3 /* LocationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationService.swift; sourceTree = "<group>"; };
+		353FADA7DA99683573FEFE88 /* MessagePreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagePreviewView.swift; sourceTree = "<group>"; };
+		38BB23E5D74A9D19F876D266 /* ProtectionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProtectionManager.swift; sourceTree = "<group>"; };
+		39EA4ECEE01DF1E6F05A1B21 /* BoozeBlockerUITests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = BoozeBlockerUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		3D3100EEDB2DEF3162A7D704 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		3EE97EFFDCE0E75472684F27 /* BoozeBlocker.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BoozeBlocker.entitlements; sourceTree = "<group>"; };
+		4305467152571B3E8DCEF04E /* IntegrationsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntegrationsView.swift; sourceTree = "<group>"; };
+		47BE187C3C03EF08EAF7E4AE /* DeepLinkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeepLinkService.swift; sourceTree = "<group>"; };
+		4B01186EF5877E84C6285F92 /* BlockedAttempt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockedAttempt.swift; sourceTree = "<group>"; };
+		4BA3AC77862D1C5061AFDDAE /* MathTestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MathTestView.swift; sourceTree = "<group>"; };
+		4E025C880F20279D8C21F26B /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
+		509B8DC6354412E3CB2D3557 /* BiometricService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BiometricService.swift; sourceTree = "<group>"; };
+		50BAAF14BF63E49448A3D19C /* BlockedContactsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockedContactsView.swift; sourceTree = "<group>"; };
+		518670B4BB6FA03B08809FB9 /* DurationOption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DurationOption.swift; sourceTree = "<group>"; };
+		51B86236AD5F49DF7556B39E /* SharedStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedStore.swift; sourceTree = "<group>"; };
+		528735E53A32E040F1D8846A /* DurationPickerSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DurationPickerSheet.swift; sourceTree = "<group>"; };
+		58EE2D6BCAA37DBEA7781476 /* ProtectionSessionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProtectionSessionTests.swift; sourceTree = "<group>"; };
+		5F91EBBC69FFB8DA05BC3AFC /* EmergencyContactsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmergencyContactsView.swift; sourceTree = "<group>"; };
+		603ABAC6C1E6181D4FB8C44C /* StatusCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusCard.swift; sourceTree = "<group>"; };
+		65124308841E6E30B48813C5 /* PersistenceService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistenceService.swift; sourceTree = "<group>"; };
+		69E1C7E34ECF3818E263A5B2 /* TypingTestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypingTestView.swift; sourceTree = "<group>"; };
+		7319CB2B26B7A1F2BE233816 /* SobrietyTestServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SobrietyTestServiceTests.swift; sourceTree = "<group>"; };
+		783FEEFD31C1C9C8C7D4753E /* OuraService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OuraService.swift; sourceTree = "<group>"; };
+		7A7DC86FAD51EE027AC73FCD /* BoozeBlockerWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoozeBlockerWidget.swift; sourceTree = "<group>"; };
+		7BA3085001E46412D1DDAB6F /* InsightsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsightsView.swift; sourceTree = "<group>"; };
+		7CF4BF563AF08D303DADF384 /* AppearanceSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearanceSettingsView.swift; sourceTree = "<group>"; };
+		7E2107C64C3F81A69460A2D6 /* ContactsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsService.swift; sourceTree = "<group>"; };
+		848A88C6B3E7FDD16A7398E8 /* BoozeBlockerWidgetBundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoozeBlockerWidgetBundle.swift; sourceTree = "<group>"; };
+		84A22DDB6BE1D7336305CA97 /* PlaidService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaidService.swift; sourceTree = "<group>"; };
+		8DE91D92670B8DDFE43D3A92 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		90AB04487A9A1E1D00194EDF /* BalanceTestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BalanceTestView.swift; sourceTree = "<group>"; };
+		952E3CA6CEB70FDC94111635 /* SobrietyTestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SobrietyTestView.swift; sourceTree = "<group>"; };
+		959AA4F18AA29E2D545BECEB /* SiriShortcutsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SiriShortcutsView.swift; sourceTree = "<group>"; };
+		A21C42D58F669596657F867B /* DeepLinkServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeepLinkServiceTests.swift; sourceTree = "<group>"; };
+		A459FE0B4C08A0033E6B2008 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		B16AC66DEEB854FD5ED8796F /* AppearanceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearanceManager.swift; sourceTree = "<group>"; };
+		B73238DE1B15FC1F011DEEC4 /* SobrietyTestService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SobrietyTestService.swift; sourceTree = "<group>"; };
+		BBDE83755E649B860864095A /* OnboardingSmokeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingSmokeTests.swift; sourceTree = "<group>"; };
+		BF5BC0A6C11D8ACD7E4B7844 /* RecentActivityCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentActivityCard.swift; sourceTree = "<group>"; };
+		C5E0FF3992ECEBDD29235746 /* ShieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShieldView.swift; sourceTree = "<group>"; };
+		C705750F4B15721646525B13 /* AppGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppGroup.swift; sourceTree = "<group>"; };
+		CD888538B605D6200A82C167 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		D279A377045DF0E8BAA8C48D /* BoozeBlockerWidget.appex */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "wrapper.app-extension"; path = BoozeBlockerWidget.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		D4CE76C2CF78731F39FAC1B3 /* ScreenTimeService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenTimeService.swift; sourceTree = "<group>"; };
+		D601482266641354761481D4 /* MorningSummaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MorningSummaryView.swift; sourceTree = "<group>"; };
+		D9C120CDD38FEDF3A56715A9 /* SharedPersistenceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedPersistenceTests.swift; sourceTree = "<group>"; };
+		DD00E9639B14D7A6F809D21E /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
+		DD22A8BAD52323F272591B70 /* BoozeBlockerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoozeBlockerApp.swift; sourceTree = "<group>"; };
+		DD34488514780CD34784A7E2 /* BlockedApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockedApp.swift; sourceTree = "<group>"; };
+		DFB516437CAFD350F8BDA698 /* HapticService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticService.swift; sourceTree = "<group>"; };
+		E1B2BCAAE654B8873E42C4FC /* PermissionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionsView.swift; sourceTree = "<group>"; };
+		E2481948921B5F220EF28C1F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		E26BA4C755B402DA18071BC9 /* String+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extensions.swift"; sourceTree = "<group>"; };
+		E6F0969DB0DB21F48FF336E2 /* Color+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Extensions.swift"; sourceTree = "<group>"; };
+		EEAE7B2A461C494FEA10EA76 /* Date+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extensions.swift"; sourceTree = "<group>"; };
+		F2FDA3FB36F1E6EBAAC4540D /* BlockedContact.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockedContact.swift; sourceTree = "<group>"; };
+		F45AA5DAB67B025D80DDAC67 /* HomeView+Enhanced.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HomeView+Enhanced.swift"; sourceTree = "<group>"; };
+		F4D75503A4FA5A6C6221C647 /* BlockedAppsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockedAppsView.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		01C69D212658A6A17355E207 /* BoozeBlocker */ = {
 			isa = PBXGroup;
 			children = (
+				17D4501BA6AC7D3A83C90E43 /* App */,
+				0407603CADE41102F0E2CFBC /* Core */,
+				D457B935D8A04A15230E90B2 /* Features */,
+				08FB1CA56F485E9CDFE1DE92 /* Resources */,
 			);
 			path = BoozeBlocker;
 			sourceTree = "<group>";
 		};
+		0407603CADE41102F0E2CFBC /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				93829B159111E4FF62AC185F /* Extensions */,
+				330210AA096F648F99C62A82 /* Models */,
+				9433C053DEE6F42790823AEB /* Services */,
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
+		08FB1CA56F485E9CDFE1DE92 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				3D3100EEDB2DEF3162A7D704 /* Assets.xcassets */,
+				3EE97EFFDCE0E75472684F27 /* BoozeBlocker.entitlements */,
+				CD888538B605D6200A82C167 /* Info.plist */,
+				A459FE0B4C08A0033E6B2008 /* PrivacyInfo.xcprivacy */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		17D4501BA6AC7D3A83C90E43 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				E2481948921B5F220EF28C1F /* AppDelegate.swift */,
+				DD22A8BAD52323F272591B70 /* BoozeBlockerApp.swift */,
+				28EF35366D02C9404D83A322 /* ContentView.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		24DBDD297F700523C2FBF1E1 /* BoozeBlockerTests */ = {
+			isa = PBXGroup;
+			children = (
+				A21C42D58F669596657F867B /* DeepLinkServiceTests.swift */,
+				18A5E0142987C5D16A6D6E17 /* ProtectionManagerTests.swift */,
+				58EE2D6BCAA37DBEA7781476 /* ProtectionSessionTests.swift */,
+				D9C120CDD38FEDF3A56715A9 /* SharedPersistenceTests.swift */,
+				7319CB2B26B7A1F2BE233816 /* SobrietyTestServiceTests.swift */,
+			);
+			path = BoozeBlockerTests;
+			sourceTree = "<group>";
+		};
+		2FD453A1FCB2F3F2E4186A50 /* SobrietyTest */ = {
+			isa = PBXGroup;
+			children = (
+				90AB04487A9A1E1D00194EDF /* BalanceTestView.swift */,
+				4BA3AC77862D1C5061AFDDAE /* MathTestView.swift */,
+				16FBD093B86ABA2F11366EF7 /* ReactionTestView.swift */,
+				952E3CA6CEB70FDC94111635 /* SobrietyTestView.swift */,
+				69E1C7E34ECF3818E263A5B2 /* TypingTestView.swift */,
+			);
+			path = SobrietyTest;
+			sourceTree = "<group>";
+		};
+		330210AA096F648F99C62A82 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				DD34488514780CD34784A7E2 /* BlockedApp.swift */,
+				F2FDA3FB36F1E6EBAAC4540D /* BlockedContact.swift */,
+				518670B4BB6FA03B08809FB9 /* DurationOption.swift */,
+				1D5F50BA4E8E73333762FE76 /* UserSettings.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		34B64122F75D0565B60DA85B /* BoozeBlockerUITests */ = {
+			isa = PBXGroup;
+			children = (
+				BBDE83755E649B860864095A /* OnboardingSmokeTests.swift */,
+			);
+			path = BoozeBlockerUITests;
+			sourceTree = "<group>";
+		};
+		3E3212E9400FA4A2681A47B3 = {
+			isa = PBXGroup;
+			children = (
+				01C69D212658A6A17355E207 /* BoozeBlocker */,
+				24DBDD297F700523C2FBF1E1 /* BoozeBlockerTests */,
+				34B64122F75D0565B60DA85B /* BoozeBlockerUITests */,
+				44E4223362D04CB84A4BB9B7 /* BoozeBlockerWidget */,
+				FF08E2F53521B1D37EB327C7 /* Shared */,
+				6DDECF8C7BBCFEA148B30A93 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		3F1619B0434E4266B0541A31 /* History */ = {
+			isa = PBXGroup;
+			children = (
+				090151B039405A6A3FE40BDA /* HistoryView.swift */,
+				7BA3085001E46412D1DDAB6F /* InsightsView.swift */,
+				D601482266641354761481D4 /* MorningSummaryView.swift */,
+			);
+			path = History;
+			sourceTree = "<group>";
+		};
+		44E4223362D04CB84A4BB9B7 /* BoozeBlockerWidget */ = {
+			isa = PBXGroup;
+			children = (
+				28E2159AC574185946C00AF6 /* BoozeBlockerWidget.entitlements */,
+				7A7DC86FAD51EE027AC73FCD /* BoozeBlockerWidget.swift */,
+				848A88C6B3E7FDD16A7398E8 /* BoozeBlockerWidgetBundle.swift */,
+				20AB281EC2F8E5885653536A /* Info.plist */,
+			);
+			path = BoozeBlockerWidget;
+			sourceTree = "<group>";
+		};
+		6DDECF8C7BBCFEA148B30A93 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				206BC0559B439A25B8D80660 /* BoozeBlocker.app */,
+				325CC171BD931A7F9F0D6738 /* BoozeBlockerTests.xctest */,
+				39EA4ECEE01DF1E6F05A1B21 /* BoozeBlockerUITests.xctest */,
+				D279A377045DF0E8BAA8C48D /* BoozeBlockerWidget.appex */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		8A2A9DFC52EEDE5E1088ABFF /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				528735E53A32E040F1D8846A /* DurationPickerSheet.swift */,
+				170143CB5E7C658E9A7C4768 /* QuickActionsView.swift */,
+				BF5BC0A6C11D8ACD7E4B7844 /* RecentActivityCard.swift */,
+				603ABAC6C1E6181D4FB8C44C /* StatusCard.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		93829B159111E4FF62AC185F /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				E6F0969DB0DB21F48FF336E2 /* Color+Extensions.swift */,
+				EEAE7B2A461C494FEA10EA76 /* Date+Extensions.swift */,
+				E26BA4C755B402DA18071BC9 /* String+Extensions.swift */,
+				26EBFE6F86ACACE248466640 /* View+Extensions.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		9433C053DEE6F42790823AEB /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				B16AC66DEEB854FD5ED8796F /* AppearanceManager.swift */,
+				509B8DC6354412E3CB2D3557 /* BiometricService.swift */,
+				7E2107C64C3F81A69460A2D6 /* ContactsService.swift */,
+				47BE187C3C03EF08EAF7E4AE /* DeepLinkService.swift */,
+				DFB516437CAFD350F8BDA698 /* HapticService.swift */,
+				34E8E8B1C4C2EF46B4E12BF3 /* LocationService.swift */,
+				DD00E9639B14D7A6F809D21E /* NotificationService.swift */,
+				783FEEFD31C1C9C8C7D4753E /* OuraService.swift */,
+				65124308841E6E30B48813C5 /* PersistenceService.swift */,
+				84A22DDB6BE1D7336305CA97 /* PlaidService.swift */,
+				38BB23E5D74A9D19F876D266 /* ProtectionManager.swift */,
+				D4CE76C2CF78731F39FAC1B3 /* ScreenTimeService.swift */,
+				B73238DE1B15FC1F011DEEC4 /* SobrietyTestService.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		9CD4CC1002EECC855F51D749 /* Protection */ = {
+			isa = PBXGroup;
+			children = (
+				353FADA7DA99683573FEFE88 /* MessagePreviewView.swift */,
+				C5E0FF3992ECEBDD29235746 /* ShieldView.swift */,
+				2FD453A1FCB2F3F2E4186A50 /* SobrietyTest */,
+			);
+			path = Protection;
+			sourceTree = "<group>";
+		};
+		C872EA0781AE9B5035F3F49C /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				8DE91D92670B8DDFE43D3A92 /* HomeView.swift */,
+				F45AA5DAB67B025D80DDAC67 /* HomeView+Enhanced.swift */,
+				8A2A9DFC52EEDE5E1088ABFF /* Components */,
+			);
+			path = Home;
+			sourceTree = "<group>";
+		};
+		D457B935D8A04A15230E90B2 /* Features */ = {
+			isa = PBXGroup;
+			children = (
+				3F1619B0434E4266B0541A31 /* History */,
+				C872EA0781AE9B5035F3F49C /* Home */,
+				DB7F59CEE6E165D183C7AEBC /* Onboarding */,
+				9CD4CC1002EECC855F51D749 /* Protection */,
+				EF89982B9CFE76A1F1C66D2D /* Settings */,
+			);
+			path = Features;
+			sourceTree = "<group>";
+		};
+		DB7F59CEE6E165D183C7AEBC /* Onboarding */ = {
+			isa = PBXGroup;
+			children = (
+				4E025C880F20279D8C21F26B /* OnboardingView.swift */,
+				E1B2BCAAE654B8873E42C4FC /* PermissionsView.swift */,
+			);
+			path = Onboarding;
+			sourceTree = "<group>";
+		};
+		EEBDDECB0A96462461913C4F /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				4B01186EF5877E84C6285F92 /* BlockedAttempt.swift */,
+				2609971425951E3BA94610B5 /* ProtectionSession.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		EF89982B9CFE76A1F1C66D2D /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				7CF4BF563AF08D303DADF384 /* AppearanceSettingsView.swift */,
+				F4D75503A4FA5A6C6221C647 /* BlockedAppsView.swift */,
+				50BAAF14BF63E49448A3D19C /* BlockedContactsView.swift */,
+				5F91EBBC69FFB8DA05BC3AFC /* EmergencyContactsView.swift */,
+				079192E8B81ABAEDAF14FE8C /* HelpSupportView.swift */,
+				4305467152571B3E8DCEF04E /* IntegrationsView.swift */,
+				27A5490B5519178D9185515D /* PrivacySettingsView.swift */,
+				1CABED0AAC2F2BBC03B8FA32 /* ScheduleSettingsView.swift */,
+				018C8418088906671AC14662 /* SettingsView.swift */,
+				959AA4F18AA29E2D545BECEB /* SiriShortcutsView.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		FF08E2F53521B1D37EB327C7 /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				C705750F4B15721646525B13 /* AppGroup.swift */,
+				295D70327A933AF7EFCE46FC /* ProtectionEntry.swift */,
+				51B86236AD5F49DF7556B39E /* SharedStore.swift */,
+				EEBDDECB0A96462461913C4F /* Models */,
+			);
+			path = Shared;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
+/* Begin PBXNativeTarget section */
+		56CEA173BC657C9ECE7544BC /* BoozeBlocker */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 2D593FC00DB1AC4DBE1047FC /* Build configuration list for PBXNativeTarget "BoozeBlocker" */;
+			buildPhases = (
+				47F69E594904CAD7318F3BD8 /* Sources */,
+				EB35320266F79304387C630D /* Resources */,
+				684B920C9BEB0D0A38650363 /* Embed Foundation Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				35292E8D40DC777E993A9661 /* PBXTargetDependency */,
+			);
+			name = BoozeBlocker;
+			packageProductDependencies = (
+			);
+			productName = BoozeBlocker;
+			productReference = 206BC0559B439A25B8D80660 /* BoozeBlocker.app */;
+			productType = "com.apple.product-type.application";
+		};
+		8D9FDE76AFE200793DF3D3C1 /* BoozeBlockerWidget */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 510AD6326703406F6F1B8A55 /* Build configuration list for PBXNativeTarget "BoozeBlockerWidget" */;
+			buildPhases = (
+				96BF1222E0CFB9FB4C1FFE64 /* Sources */,
+				6E040D521604497EA00685AB /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = BoozeBlockerWidget;
+			packageProductDependencies = (
+			);
+			productName = BoozeBlockerWidget;
+			productReference = D279A377045DF0E8BAA8C48D /* BoozeBlockerWidget.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		AE17ED6A37B9F9AC9D71CD06 /* BoozeBlockerTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = ADB556D4FABB4CC18BED8C05 /* Build configuration list for PBXNativeTarget "BoozeBlockerTests" */;
+			buildPhases = (
+				FEEA669CA61B2DC651A216C9 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				04B706CC7DED41DAE6326F29 /* PBXTargetDependency */,
+			);
+			name = BoozeBlockerTests;
+			packageProductDependencies = (
+			);
+			productName = BoozeBlockerTests;
+			productReference = 325CC171BD931A7F9F0D6738 /* BoozeBlockerTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		CD848D94A83F94C895E09521 /* BoozeBlockerUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F97969236F109EB849416CE4 /* Build configuration list for PBXNativeTarget "BoozeBlockerUITests" */;
+			buildPhases = (
+				6D0D28E62F1720EBA9C88E88 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				46E06BF4721304AA1AFB82AD /* PBXTargetDependency */,
+			);
+			name = BoozeBlockerUITests;
+			packageProductDependencies = (
+			);
+			productName = BoozeBlockerUITests;
+			productReference = 39EA4ECEE01DF1E6F05A1B21 /* BoozeBlockerUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
 /* Begin PBXProject section */
-		00000000000000000000000 /* Project object */ = {
+		FECBC3F4E543ED9105CC3212 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 1500;
-				LastUpgradeCheck = 1500;
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
 				TargetAttributes = {
+					56CEA173BC657C9ECE7544BC = {
+						DevelopmentTeam = "";
+					};
+					8D9FDE76AFE200793DF3D3C1 = {
+						DevelopmentTeam = "";
+					};
+					AE17ED6A37B9F9AC9D71CD06 = {
+						DevelopmentTeam = "";
+					};
+					CD848D94A83F94C895E09521 = {
+						DevelopmentTeam = "";
+						TestTargetID = 56CEA173BC657C9ECE7544BC;
+					};
 				};
 			};
-			buildConfigurationList = 00000000000000000000003 /* Build configuration list for PBXProject "BoozeBlocker" */;
-			compatibilityVersion = "Xcode 14.0";
+			buildConfigurationList = E27053250D909EBCBE5F7BB0 /* Build configuration list for PBXProject "BoozeBlocker" */;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
-				en,
 				Base,
+				en,
 			);
-			mainGroup = 00000000000000000000001;
-			productRefGroup = 00000000000000000000001;
+			mainGroup = 3E3212E9400FA4A2681A47B3;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 6DDECF8C7BBCFEA148B30A93 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
+				56CEA173BC657C9ECE7544BC /* BoozeBlocker */,
+				8D9FDE76AFE200793DF3D3C1 /* BoozeBlockerWidget */,
+				AE17ED6A37B9F9AC9D71CD06 /* BoozeBlockerTests */,
+				CD848D94A83F94C895E09521 /* BoozeBlockerUITests */,
 			);
 		};
 /* End PBXProject section */
 
+/* Begin PBXResourcesBuildPhase section */
+		6E040D521604497EA00685AB /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8FF017569F13D336A67FE3DC /* PrivacyInfo.xcprivacy in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		EB35320266F79304387C630D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				38E9841F431FBD6EB83D2986 /* Assets.xcassets in Resources */,
+				6E1400C06AFE3BAD23938DA7 /* PrivacyInfo.xcprivacy in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		47F69E594904CAD7318F3BD8 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				98D8F9B23A2649E65071101C /* AppDelegate.swift in Sources */,
+				A697EB14063031E885A009C7 /* AppGroup.swift in Sources */,
+				A7C074A3291887325FEC8343 /* AppearanceManager.swift in Sources */,
+				510BC67C8F7E9A2701023D5A /* AppearanceSettingsView.swift in Sources */,
+				91FF25E832DE9FFD4F647423 /* BalanceTestView.swift in Sources */,
+				3307BE01A2F2ECDAD0EAE393 /* BiometricService.swift in Sources */,
+				D6B5952A96E3EFDF60A58BAD /* BlockedApp.swift in Sources */,
+				E58B2CC449F14820E3610BF4 /* BlockedAppsView.swift in Sources */,
+				1E0117B4420E232523FD7D27 /* BlockedAttempt.swift in Sources */,
+				A156AB2E8721415E0E71CBE0 /* BlockedContact.swift in Sources */,
+				61927E463A521A806CEC3356 /* BlockedContactsView.swift in Sources */,
+				A905DAACD8089EB67FBC4F63 /* BoozeBlockerApp.swift in Sources */,
+				FDF0B490BA25D4A707F66234 /* Color+Extensions.swift in Sources */,
+				647106042EF42464E92F6E4D /* ContactsService.swift in Sources */,
+				EE28726BF08FF951D7320BC2 /* ContentView.swift in Sources */,
+				4318167A6760894AFCD8619A /* Date+Extensions.swift in Sources */,
+				3D87E0F08F40DC6A82E21035 /* DeepLinkService.swift in Sources */,
+				34D00D4B81AA46C3989C62C8 /* DurationOption.swift in Sources */,
+				0160E450FADFEAAC19083C75 /* DurationPickerSheet.swift in Sources */,
+				849C58A7E080415ED2A9023E /* EmergencyContactsView.swift in Sources */,
+				A2F12C3B599DBF8CFEEB9DA8 /* HapticService.swift in Sources */,
+				54624CB629E12DB4E68DE47E /* HelpSupportView.swift in Sources */,
+				4D6726E37FE17660D3B0CAC7 /* HistoryView.swift in Sources */,
+				F38B28ED08B4A54B0C530C80 /* HomeView+Enhanced.swift in Sources */,
+				E63B25A6D2555903DA784C75 /* HomeView.swift in Sources */,
+				2CBF08BD54D06352D16FCE0F /* InsightsView.swift in Sources */,
+				A8440FA62A464E1AFABB0461 /* IntegrationsView.swift in Sources */,
+				405C689A776DB89F4F00AE42 /* LocationService.swift in Sources */,
+				B8AC2D6ABA93A46B9CC703AE /* MathTestView.swift in Sources */,
+				6C3A79FF6C79FD06378E566D /* MessagePreviewView.swift in Sources */,
+				A94818201E8A1002BF2F8FB8 /* MorningSummaryView.swift in Sources */,
+				A6E711955C99781BEBFA5C65 /* NotificationService.swift in Sources */,
+				1B05E96E93F97499EAC3E7F4 /* OnboardingView.swift in Sources */,
+				132DA50A636B16F1F9EDF023 /* OuraService.swift in Sources */,
+				8A7A6CB48428922CAE3C4716 /* PermissionsView.swift in Sources */,
+				D1AE364A5AAAFDAA9AA9D886 /* PersistenceService.swift in Sources */,
+				B86C834F6A23C21902A467CA /* PlaidService.swift in Sources */,
+				6E21DC4862D643F6536351E8 /* PrivacySettingsView.swift in Sources */,
+				8CC26A06C76A0C29458B54F3 /* ProtectionEntry.swift in Sources */,
+				2B3756A4BECE194B01149EEE /* ProtectionManager.swift in Sources */,
+				F8079A1D4D768CFFF2A85192 /* ProtectionSession.swift in Sources */,
+				47A1CFFCF2DA4CD5A3C055A3 /* QuickActionsView.swift in Sources */,
+				CF352E862B9A8DE098B6B669 /* ReactionTestView.swift in Sources */,
+				88B6C3355DA03207FC6C78BD /* RecentActivityCard.swift in Sources */,
+				F220DDB6EEFDD94084BC8C6E /* ScheduleSettingsView.swift in Sources */,
+				0D0D82C48BCE55B82E177A4C /* ScreenTimeService.swift in Sources */,
+				8DFF50D37183092794F53247 /* SettingsView.swift in Sources */,
+				E981935C555610810D2D9232 /* SharedStore.swift in Sources */,
+				4255A62A9B337AD53008A11F /* ShieldView.swift in Sources */,
+				9C0C7E74A9B0A5160269505D /* SiriShortcutsView.swift in Sources */,
+				354E377E89BF08C7FF7F3BAC /* SobrietyTestService.swift in Sources */,
+				ED217000887B3EF17386CC87 /* SobrietyTestView.swift in Sources */,
+				6ABD567BA4F032893A855BA4 /* StatusCard.swift in Sources */,
+				662632A480C03D2F605756E4 /* String+Extensions.swift in Sources */,
+				83EF6DA9673AB70C142B3E4B /* TypingTestView.swift in Sources */,
+				8EDE70E56FB330BD5C14A6E1 /* UserSettings.swift in Sources */,
+				A92B06663367F35714119181 /* View+Extensions.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6D0D28E62F1720EBA9C88E88 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F55B75002A59D9B701F127B9 /* OnboardingSmokeTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		96BF1222E0CFB9FB4C1FFE64 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				59E619A21929F93F49373270 /* AppGroup.swift in Sources */,
+				082D7F75FFC28110C89B4D62 /* BlockedAttempt.swift in Sources */,
+				ED595FD454571A15828F11C4 /* BoozeBlockerWidget.swift in Sources */,
+				6847CC5C93A57E0DD944E615 /* BoozeBlockerWidgetBundle.swift in Sources */,
+				D3E6CAF0E459131DDC2E1911 /* ProtectionEntry.swift in Sources */,
+				F5C914171C4D696BECC4A6A6 /* ProtectionSession.swift in Sources */,
+				4B73DED37F9CB988D4BCDEEA /* SharedStore.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FEEA669CA61B2DC651A216C9 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5BB5FC7E6C0F516299B7C726 /* DeepLinkServiceTests.swift in Sources */,
+				9838F37B154992A1E7D68EFA /* ProtectionManagerTests.swift in Sources */,
+				8BE818FB4766554E0C2AE568 /* ProtectionSessionTests.swift in Sources */,
+				8D67AB0864BF383DD6E53DDD /* SharedPersistenceTests.swift in Sources */,
+				F846F5D7592C5EEF4E30CA17 /* SobrietyTestServiceTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		04B706CC7DED41DAE6326F29 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 56CEA173BC657C9ECE7544BC /* BoozeBlocker */;
+			targetProxy = 068595D70C75A278FE8A6AEA /* PBXContainerItemProxy */;
+		};
+		35292E8D40DC777E993A9661 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 8D9FDE76AFE200793DF3D3C1 /* BoozeBlockerWidget */;
+			targetProxy = E2A9DD5C02A37271F2F87BE3 /* PBXContainerItemProxy */;
+		};
+		46E06BF4721304AA1AFB82AD /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 56CEA173BC657C9ECE7544BC /* BoozeBlocker */;
+			targetProxy = 01B362D1C3574CB4D40110E1 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin XCBuildConfiguration section */
-		00000000000000000000004 /* Debug */ = {
+		08998BF16D6808C32A0071AD /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				APP_GROUP_ID = group.com.connorq03.boozeblocker;
+				BUNDLE_ID_PREFIX = com.connorq03.boozeblocker;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_ENABLE_OBJC_WEAK = YES;
@@ -85,17 +748,18 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
 					"$(inherited)",
+					"DEBUG=1",
 				);
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
@@ -103,25 +767,47 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
-				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 1.0.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.9;
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
-		00000000000000000000005 /* Release */ = {
+		1C64220F85A20C1F108F2BF6 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "$(BUNDLE_ID_PREFIX).uitests";
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = BoozeBlocker;
+			};
+			name = Release;
+		};
+		4FBA226ADD9D4C0BF9C27780 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				APP_GROUP_ID = group.com.connorq03.boozeblocker;
+				BUNDLE_ID_PREFIX = com.connorq03.boozeblocker;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_ENABLE_OBJC_WEAK = YES;
@@ -148,11 +834,12 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = "";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
@@ -160,30 +847,187 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
-				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 1.0.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
-				VALIDATE_PRODUCT = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.9;
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
+		};
+		6888268FD1603850BB2ED890 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = BoozeBlockerWidget/BoozeBlockerWidget.entitlements;
+				INFOPLIST_FILE = BoozeBlockerWidget/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "$(BUNDLE_ID_PREFIX).widget";
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		80BC2337A39A02C1ED8E18B4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "$(BUNDLE_ID_PREFIX).tests";
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BoozeBlocker.app/BoozeBlocker";
+			};
+			name = Release;
+		};
+		96F3744E7A862BA4C3BAF9E3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "$(BUNDLE_ID_PREFIX).tests";
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BoozeBlocker.app/BoozeBlocker";
+			};
+			name = Debug;
+		};
+		9B2DD863DBDAD2A3290E4057 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = BoozeBlocker/Resources/BoozeBlocker.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				INFOPLIST_FILE = BoozeBlocker/Resources/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "$(BUNDLE_ID_PREFIX)";
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		B01469B528DC8610C8E34D6A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "$(BUNDLE_ID_PREFIX).uitests";
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = BoozeBlocker;
+			};
+			name = Debug;
+		};
+		D1046BA51F861723C823BB6F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = BoozeBlockerWidget/BoozeBlockerWidget.entitlements;
+				INFOPLIST_FILE = BoozeBlockerWidget/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "$(BUNDLE_ID_PREFIX).widget";
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		DE15750C52669A734906C627 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = BoozeBlocker/Resources/BoozeBlocker.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				INFOPLIST_FILE = BoozeBlocker/Resources/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "$(BUNDLE_ID_PREFIX)";
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		00000000000000000000003 /* Build configuration list for PBXProject "BoozeBlocker" */ = {
+		2D593FC00DB1AC4DBE1047FC /* Build configuration list for PBXNativeTarget "BoozeBlocker" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				00000000000000000000004 /* Debug */,
-				00000000000000000000005 /* Release */,
+				DE15750C52669A734906C627 /* Debug */,
+				9B2DD863DBDAD2A3290E4057 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
+		};
+		510AD6326703406F6F1B8A55 /* Build configuration list for PBXNativeTarget "BoozeBlockerWidget" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D1046BA51F861723C823BB6F /* Debug */,
+				6888268FD1603850BB2ED890 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		ADB556D4FABB4CC18BED8C05 /* Build configuration list for PBXNativeTarget "BoozeBlockerTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				96F3744E7A862BA4C3BAF9E3 /* Debug */,
+				80BC2337A39A02C1ED8E18B4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		E27053250D909EBCBE5F7BB0 /* Build configuration list for PBXProject "BoozeBlocker" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				08998BF16D6808C32A0071AD /* Debug */,
+				4FBA226ADD9D4C0BF9C27780 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		F97969236F109EB849416CE4 /* Build configuration list for PBXNativeTarget "BoozeBlockerUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B01469B528DC8610C8E34D6A /* Debug */,
+				1C64220F85A20C1F108F2BF6 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
 		};
 /* End XCConfigurationList section */
-
 	};
-	rootObject = 00000000000000000000000 /* Project object */;
+	rootObject = FECBC3F4E543ED9105CC3212 /* Project object */;
 }

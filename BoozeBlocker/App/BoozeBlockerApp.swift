@@ -2,12 +2,33 @@ import SwiftUI
 
 @main
 struct BoozeBlockerApp: App {
-    @StateObject private var protectionManager = ProtectionManager.shared
-    @StateObject private var screenTimeService = ScreenTimeService.shared
-    @StateObject private var notificationService = NotificationService.shared
+    @UIApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
+    @ObservedObject private var appearanceManager = AppearanceManager.shared
+    @StateObject private var protectionManager: ProtectionManager
+    @StateObject private var screenTimeService: ScreenTimeService
+    @StateObject private var notificationService: NotificationService
     
     @AppStorage("hasCompletedOnboarding") private var hasCompletedOnboarding = false
     @AppStorage("hasGrantedPermissions") private var hasGrantedPermissions = false
+
+    init() {
+        #if DEBUG
+        let arguments = ProcessInfo.processInfo.arguments
+        if let index = arguments.firstIndex(of: "-resetState"),
+           arguments.indices.contains(index + 1), arguments[index + 1] == "YES" {
+            if let bundleIdentifier = Bundle.main.bundleIdentifier {
+                UserDefaults.standard.removePersistentDomain(forName: bundleIdentifier)
+            }
+            let appGroup = AppGroup.id
+            UserDefaults(suiteName: appGroup)?.removePersistentDomain(forName: appGroup)
+            hasCompletedOnboarding = false
+            hasGrantedPermissions = false
+        }
+        #endif
+        _protectionManager = StateObject(wrappedValue: ProtectionManager.shared)
+        _screenTimeService = StateObject(wrappedValue: ScreenTimeService.shared)
+        _notificationService = StateObject(wrappedValue: NotificationService.shared)
+    }
     
     var body: some Scene {
         WindowGroup {
@@ -15,6 +36,8 @@ struct BoozeBlockerApp: App {
                 hasCompletedOnboarding: $hasCompletedOnboarding,
                 hasGrantedPermissions: $hasGrantedPermissions
             )
+            .preferredColorScheme(appearanceManager.colorScheme.colorScheme)
+            .tint(appearanceManager.accentColor.color)
             .environmentObject(protectionManager)
             .environmentObject(screenTimeService)
             .environmentObject(notificationService)

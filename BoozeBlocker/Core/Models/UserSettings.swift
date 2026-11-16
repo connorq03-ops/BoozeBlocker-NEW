@@ -1,7 +1,7 @@
 import Foundation
 
 /// User's persistent settings for the app
-struct UserSettings: Codable {
+struct UserSettings: Codable, Equatable {
     /// Bundle identifiers of apps to block (e.g., "com.instagram.Instagram")
     var blockedAppBundleIDs: [String]
     
@@ -20,9 +20,6 @@ struct UserSettings: Codable {
     /// Whether to show notifications when attempts are blocked
     var showBlockedAttemptNotifications: Bool
     
-    /// Whether onboarding has been completed
-    var hasCompletedOnboarding: Bool
-    
     /// Default initializer with sensible defaults
     init(
         blockedAppBundleIDs: [String] = [],
@@ -30,8 +27,7 @@ struct UserSettings: Codable {
         emergencyContactIDs: [String] = [],
         defaultDuration: TimeInterval? = 8 * 60 * 60, // 8 hours
         sobrietyTestDifficulty: SobrietyTestDifficulty = .medium,
-        showBlockedAttemptNotifications: Bool = true,
-        hasCompletedOnboarding: Bool = false
+        showBlockedAttemptNotifications: Bool = true
     ) {
         self.blockedAppBundleIDs = blockedAppBundleIDs
         self.blockedContactIDs = blockedContactIDs
@@ -39,7 +35,31 @@ struct UserSettings: Codable {
         self.defaultDuration = defaultDuration
         self.sobrietyTestDifficulty = sobrietyTestDifficulty
         self.showBlockedAttemptNotifications = showBlockedAttemptNotifications
-        self.hasCompletedOnboarding = hasCompletedOnboarding
+    }
+    private enum CodingKeys: String, CodingKey {
+        case blockedAppBundleIDs, blockedContactIDs, emergencyContactIDs, defaultDuration
+        case sobrietyTestDifficulty, showBlockedAttemptNotifications
+    }
+
+    init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        let defaults = UserSettings()
+        blockedAppBundleIDs = try values.decodeIfPresent([String].self, forKey: .blockedAppBundleIDs) ?? defaults.blockedAppBundleIDs
+        blockedContactIDs = try values.decodeIfPresent([String].self, forKey: .blockedContactIDs) ?? defaults.blockedContactIDs
+        emergencyContactIDs = try values.decodeIfPresent([String].self, forKey: .emergencyContactIDs) ?? defaults.emergencyContactIDs
+        defaultDuration = try values.decodeIfPresent(TimeInterval.self, forKey: .defaultDuration)
+        sobrietyTestDifficulty = try values.decodeIfPresent(SobrietyTestDifficulty.self, forKey: .sobrietyTestDifficulty) ?? defaults.sobrietyTestDifficulty
+        showBlockedAttemptNotifications = try values.decodeIfPresent(Bool.self, forKey: .showBlockedAttemptNotifications) ?? defaults.showBlockedAttemptNotifications
+    }
+
+    func encode(to encoder: Encoder) throws {
+        var values = encoder.container(keyedBy: CodingKeys.self)
+        try values.encode(blockedAppBundleIDs, forKey: .blockedAppBundleIDs)
+        try values.encode(blockedContactIDs, forKey: .blockedContactIDs)
+        try values.encode(emergencyContactIDs, forKey: .emergencyContactIDs)
+        try values.encode(defaultDuration, forKey: .defaultDuration)
+        try values.encode(sobrietyTestDifficulty, forKey: .sobrietyTestDifficulty)
+        try values.encode(showBlockedAttemptNotifications, forKey: .showBlockedAttemptNotifications)
     }
 }
 
