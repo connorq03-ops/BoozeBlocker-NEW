@@ -27,15 +27,32 @@ struct ExtraSobrietyTestsView: View {
         List {
             if FeatureFlags.extraSobrietyTests.isEnabled() {
                 NavigationLink("Math") {
-                    MathTestView(question: "12 + 5 = ?", correctAnswer: 17, onComplete: { _ in })
+                    PracticeTestDestination { complete in
+                        MathTestView(question: "12 + 5 = ?", correctAnswer: 17, onComplete: complete)
+                    }
                 }
                 NavigationLink("Typing") {
-                    TypingTestView(phrase: "I am making a conscious decision", onComplete: { _ in })
+                    PracticeTestDestination { complete in
+                        TypingTestView(phrase: "I am making a conscious decision", onComplete: complete)
+                    }
                 }
-                NavigationLink("Reaction") { ReactionTestView(onComplete: { _ in }) }
-                NavigationLink("Balance") { BalanceTestView(onComplete: { _ in }) }
+                NavigationLink("Reaction") {
+                    PracticeTestDestination { complete in ReactionTestView(onComplete: complete) }
+                }
+                NavigationLink("Balance") {
+                    PracticeTestDestination { complete in BalanceTestView(onComplete: complete) }
+                }
             }
         }
         .navigationTitle("Practice Tests")
+    }
+}
+
+private struct PracticeTestDestination<Content: View>: View {
+    let content: (@escaping (Bool) -> Void) -> Content
+    @Environment(\.dismiss) private var dismiss
+
+    var body: some View {
+        content { _ in dismiss() }
     }
 }
