@@ -47,9 +47,7 @@ struct UserSettings: Codable, Equatable {
         blockedAppBundleIDs = try values.decodeIfPresent([String].self, forKey: .blockedAppBundleIDs) ?? defaults.blockedAppBundleIDs
         blockedContactIDs = try values.decodeIfPresent([String].self, forKey: .blockedContactIDs) ?? defaults.blockedContactIDs
         emergencyContactIDs = try values.decodeIfPresent([String].self, forKey: .emergencyContactIDs) ?? defaults.emergencyContactIDs
-        defaultDuration = values.contains(.defaultDuration)
-            ? try values.decodeIfPresent(TimeInterval.self, forKey: .defaultDuration)
-            : defaults.defaultDuration
+        defaultDuration = try values.decodeIfPresent(TimeInterval.self, forKey: .defaultDuration)
         sobrietyTestDifficulty = try values.decodeIfPresent(SobrietyTestDifficulty.self, forKey: .sobrietyTestDifficulty) ?? defaults.sobrietyTestDifficulty
         showBlockedAttemptNotifications = try values.decodeIfPresent(Bool.self, forKey: .showBlockedAttemptNotifications) ?? defaults.showBlockedAttemptNotifications
     }

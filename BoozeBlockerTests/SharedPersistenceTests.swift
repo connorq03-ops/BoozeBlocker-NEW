@@ -93,8 +93,8 @@ final class SharedPersistenceTests: XCTestCase {
         let old = Data(#"{"hasCompletedOnboarding":true,"blockedAppBundleIDs":["com.example.app"]}"#.utf8)
         let settings = try JSONDecoder().decode(UserSettings.self, from: old)
         XCTAssertEqual(settings.blockedAppBundleIDs, ["com.example.app"])
-        XCTAssertEqual(settings.defaultDuration, UserSettings().defaultDuration)
-        XCTAssertEqual(try JSONDecoder().decode(UserSettings.self, from: Data("{}".utf8)), UserSettings())
+        XCTAssertNil(settings.defaultDuration)
+        XCTAssertEqual(try JSONDecoder().decode(UserSettings.self, from: Data("{}".utf8)), UserSettings(defaultDuration: nil))
         XCTAssertThrowsError(try JSONDecoder().decode(UserSettings.self, from: Data(#"{"blockedAppBundleIDs":false}"#.utf8)))
     }
 
@@ -131,7 +131,16 @@ final class SharedPersistenceTests: XCTestCase {
     func testDurationExplicitNullAndMissingKey() throws {
         let explicitNull = Data(#"{"defaultDuration":null}"#.utf8)
         XCTAssertNil(try JSONDecoder().decode(UserSettings.self, from: explicitNull).defaultDuration)
-        XCTAssertEqual(try JSONDecoder().decode(UserSettings.self, from: Data("{}".utf8)).defaultDuration, 8 * 3600)
+        XCTAssertNil(try JSONDecoder().decode(UserSettings.self, from: Data("{}".utf8)).defaultDuration)
+        XCTAssertEqual(UserSettings().defaultDuration, 8 * 3600)
+    }
+
+    func testExplicitDurationRoundTrips() throws {
+        let data = Data(#"{"defaultDuration":14400}"#.utf8)
+        let settings = try JSONDecoder().decode(UserSettings.self, from: data)
+        XCTAssertEqual(settings.defaultDuration, 14400)
+        let encoded = try JSONEncoder().encode(settings)
+        XCTAssertEqual(try JSONDecoder().decode(UserSettings.self, from: encoded), settings)
     }
 
     func testReadOnlySessionLoadDoesNotMutateStorage() throws {
