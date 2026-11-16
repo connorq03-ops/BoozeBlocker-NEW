@@ -50,7 +50,7 @@ class DeepLinkService: ObservableObject {
 }
 
 /// Actions that can be triggered via deep link
-enum DeepLinkAction {
+enum DeepLinkAction: Equatable {
     case activate(duration: TimeInterval?)
     case deactivate
     case openSettings(section: String?)

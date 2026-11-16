@@ -105,32 +105,23 @@ BoozeBlocker/
 
 ## Requirements
 
-- iOS 16.0+
+- iOS 17.0+
 - Xcode 15.0+
 - Swift 5.9+
 
 ## Setup in Xcode
 
-1. **Create New Project**
-   - Open Xcode → File → New → Project
-   - Choose "App" under iOS
-   - Product Name: "BoozeBlocker"
-   - Interface: SwiftUI
-   - Language: Swift
+```sh
+brew install xcodegen
+xcodegen generate
+open BoozeBlocker.xcodeproj
+```
 
-2. **Copy Swift Files**
-   - Copy all files from `BoozeBlocker/` folder into your Xcode project
-   - Maintain the folder structure
-
-3. **Add Capabilities**
-   - Select project → Signing & Capabilities
-   - Add: Family Controls (for Screen Time)
-   - Add: App Groups (for widget)
-
-4. **Configure Entitlements**
-   - Request Family Controls entitlement from Apple Developer Portal
-
-5. **Build and Run**
+Select the BoozeBlocker scheme and an iPhone simulator, then build and run.
+The generated project is committed. Make project changes in `project.yml`
+and regenerate. Device signing requires selecting your own development team.
+This phase does not enable Family Controls or configure App Group entitlements;
+Screen Time blocking remains simulated.
 
 ## Permissions Required
 

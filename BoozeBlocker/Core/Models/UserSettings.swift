@@ -1,7 +1,7 @@
 import Foundation
 
 /// User's persistent settings for the app
-struct UserSettings: Codable {
+struct UserSettings: Codable, Equatable {
     /// Bundle identifiers of apps to block (e.g., "com.instagram.Instagram")
     var blockedAppBundleIDs: [String]
     

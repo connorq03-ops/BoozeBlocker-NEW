@@ -204,6 +204,9 @@ struct BoozeBlockerWidget: Widget {
     var body: some WidgetConfiguration {
         StaticConfiguration(kind: kind, provider: ProtectionProvider()) { entry in
             WidgetEntryView(entry: entry)
+                .containerBackground(for: .widget) {
+                    (entry.isProtected ? Color.green : Color.clear).opacity(0.1)
+                }
         }
         .configurationDisplayName("Protection Status")
         .description("See your current protection status at a glance")
@@ -234,6 +237,9 @@ struct QuickActivateWidget: Widget {
     var body: some WidgetConfiguration {
         StaticConfiguration(kind: kind, provider: ProtectionProvider()) { entry in
             QuickActivateView(entry: entry)
+                .containerBackground(for: .widget) {
+                    (entry.isProtected ? Color.green : Color.blue).opacity(0.1)
+                }
         }
         .configurationDisplayName("Quick Activate")
         .description("Quickly activate protection")
