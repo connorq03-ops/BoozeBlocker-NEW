@@ -29,6 +29,16 @@ final class DeepLinkServiceTests: XCTestCase {
         XCTAssertEqual(service.pendingAction, .activate(duration: nil))
     }
 
+    func testActivateWithNegativeDuration() throws {
+        XCTAssertTrue(service.handle(url: try XCTUnwrap(URL(string: "boozeblocker://activate?duration=-1"))))
+        XCTAssertEqual(service.pendingAction, .activate(duration: nil))
+    }
+
+    func testActivateWithZeroDuration() throws {
+        XCTAssertTrue(service.handle(url: try XCTUnwrap(URL(string: "boozeblocker://activate?duration=0"))))
+        XCTAssertEqual(service.pendingAction, .activate(duration: nil))
+    }
+
     func testDeactivate() throws {
         XCTAssertTrue(service.handle(url: try XCTUnwrap(URL(string: "boozeblocker://deactivate"))))
         XCTAssertEqual(service.pendingAction, .deactivate)
