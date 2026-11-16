@@ -79,21 +79,46 @@ struct SettingsView: View {
                     Text("Notifications")
                 }
                 
-                // Schedule Section
+                if FeatureFlags.schedulesEnabled {
+                    Section {
+                        NavigationLink {
+                            ScheduleSettingsView()
+                        } label: {
+                            HStack {
+                                Image(systemName: "calendar.badge.clock")
+                                    .foregroundColor(.orange)
+                                Text("Scheduled Protection")
+                            }
+                        }
+                    } header: {
+                        Text("Automation")
+                    } footer: {
+                        Text("Automatically activate protection at set times")
+                    }
+                }
+
                 Section {
-                    NavigationLink {
-                        ScheduleSettingsView()
-                    } label: {
-                        HStack {
-                            Image(systemName: "calendar.badge.clock")
-                                .foregroundColor(.orange)
-                            Text("Scheduled Protection")
+                    if FeatureFlags.integrationsEnabled {
+                        NavigationLink("Integrations (beta)") { IntegrationsView() }
+                    }
+                    if FeatureFlags.siriShortcutsEnabled {
+                        NavigationLink("Siri Shortcuts") { SiriShortcutsView() }
+                    }
+                    if FeatureFlags.delayedMessagesEnabled {
+                        NavigationLink("Message Preview (beta)") { MessagePreviewDemoView() }
+                    }
+                    if FeatureFlags.morningSummaryEnabled {
+                        if let session = PersistenceService.shared.loadSessionHistory().first {
+                            NavigationLink("Morning Summary") {
+                                MorningSummaryDestination(session: session)
+                            }
+                        } else {
+                            Text("Morning Summary available after a protection session")
                         }
                     }
-                } header: {
-                    Text("Automation")
-                } footer: {
-                    Text("Automatically activate protection at set times")
+                    if FeatureFlags.extraSobrietyTests.isEnabled() {
+                        NavigationLink("Extra Sobriety Tests (practice)") { ExtraSobrietyTestsView() }
+                    }
                 }
                 
                 // Appearance Section
@@ -187,7 +212,7 @@ struct AboutView: View {
     var body: some View {
         ScrollView {
             VStack(spacing: 20) {
-                Image(systemName: "shield.checkmark.fill")
+                Image(systemName: "checkmark.shield.fill")
                     .font(.system(size: 80))
                     .foregroundColor(.blue)
                 

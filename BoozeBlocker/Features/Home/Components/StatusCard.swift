@@ -70,7 +70,7 @@ struct AnimatedShield: View {
                 .frame(width: 120, height: 120)
             
             // Shield icon
-            Image(systemName: isActive ? "shield.checkmark.fill" : "shield.fill")
+            Image(systemName: isActive ? "checkmark.shield.fill" : "shield.fill")
                 .font(.system(size: 50))
                 .foregroundColor(.white)
                 .symbolEffect(.bounce, value: isActive)

@@ -6,6 +6,7 @@ struct MessagePreviewView: View {
     let onSendAnyway: () -> Void
     let onCancel: () -> Void
     let onSaveForLater: () -> Void
+    var isDemo = false
     
     @State private var messageText: String = ""
     @State private var showSobrietyTest = false
@@ -33,10 +34,17 @@ struct MessagePreviewView: View {
                 }
             }
             .sheet(isPresented: $showSobrietyTest) {
-                SobrietyTestView { passed in
-                    showSobrietyTest = false
-                    if passed {
-                        onSendAnyway()
+                if isDemo {
+                    TypingTestView(phrase: "I am making a conscious decision") { passed in
+                        showSobrietyTest = false
+                        if passed { onSendAnyway() }
+                    }
+                } else {
+                    SobrietyTestView { passed in
+                        showSobrietyTest = false
+                        if passed {
+                            onSendAnyway()
+                        }
                     }
                 }
             }

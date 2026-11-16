@@ -46,7 +46,7 @@ struct SmallWidgetView: View {
                     .fill(entry.isProtected ? Color.green : Color.gray.opacity(0.3))
                     .frame(width: 50, height: 50)
                 
-                Image(systemName: entry.isProtected ? "shield.checkmark.fill" : "shield.fill")
+                Image(systemName: entry.isProtected ? "checkmark.shield.fill" : "shield.fill")
                     .font(.title2)
                     .foregroundColor(.white)
             }
@@ -108,7 +108,7 @@ struct MediumWidgetView: View {
                         .fill(entry.isProtected ? Color.green : Color.gray.opacity(0.3))
                         .frame(width: 60, height: 60)
                     
-                    Image(systemName: entry.isProtected ? "shield.checkmark.fill" : "shield.fill")
+                    Image(systemName: entry.isProtected ? "checkmark.shield.fill" : "shield.fill")
                         .font(.title)
                         .foregroundColor(.white)
                 }
@@ -226,7 +226,7 @@ struct QuickActivateView: View {
     var body: some View {
         VStack(spacing: 12) {
             if entry.isProtected {
-                Image(systemName: "shield.checkmark.fill")
+                Image(systemName: "checkmark.shield.fill")
                     .font(.largeTitle)
                     .foregroundColor(.green)
                 

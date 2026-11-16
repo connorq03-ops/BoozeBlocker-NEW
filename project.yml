@@ -44,6 +44,8 @@ targets:
             CFBundleURLSchemes: [boozeblocker]
         NSContactsUsageDescription: Booze Blocker needs access to your contacts so you can select which people to block while drinking and designate emergency contacts.
         NSFaceIDUsageDescription: Use Face ID to quickly unlock the app or verify your identity for sensitive actions.
+        NSLocationWhenInUseUsageDescription: Location is used by the optional location-trigger prototype to identify nearby saved places.
+        NSLocationAlwaysAndWhenInUseUsageDescription: Allow the optional location-trigger prototype to monitor saved places when the app is not open.
     dependencies:
       - target: BoozeBlockerWidget
       - target: ShieldConfiguration

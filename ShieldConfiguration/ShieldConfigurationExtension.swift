@@ -7,7 +7,7 @@ final class ShieldConfigurationExtension: ShieldConfigurationDataSource {
         ShieldConfiguration(
             backgroundBlurStyle: .systemThickMaterialDark,
             backgroundColor: UIColor.systemIndigo.withAlphaComponent(0.6),
-            icon: UIImage(systemName: "shield.checkmark.fill"),
+            icon: UIImage(systemName: "checkmark.shield.fill"),
             title: .init(text: "\(name ?? "This app") is blocked", color: .white),
             subtitle: .init(text: "Booze Blocker is protecting you tonight.", color: .white.withAlphaComponent(0.8)),
             primaryButtonLabel: .init(text: "Stay Protected", color: .systemIndigo),

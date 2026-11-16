@@ -1,170 +1,117 @@
 # Booze Blocker
 
-An iOS app that helps you avoid drunk texting, calling, and app usage by blocking access to selected contacts and apps while you're drinking.
+An iPhone self-control app that adds friction to opening selected apps during a
+protection session. Requires iOS 17+, Xcode 15+ with an iOS SDK, and XcodeGen.
+It cannot block calls or messages to individual contacts.
 
-## Features
+## Feature status
 
-### MVP (v1.0) - Fully Implemented
-- **Manual Activation** - Tap to activate protection when you start drinking
-- **Duration Selection** - Choose how long protection lasts (until morning, X hours, or manual stop)
-- **App Blocking** - Block access to social media, dating apps, messaging apps (24 common apps pre-configured)
-- **Contact Blocking** - Prevent texting/calling specific contacts with categories (ex, boss, family, etc.)
-- **Emergency Contacts** - Designate contacts that are always accessible
-- **Sobriety Tests** - Math problems or typing tests required to deactivate protection early
-- **Session History** - Review past sessions and blocked attempts
-- **Insights Dashboard** - View statistics, streaks, and most-blocked items
-- **Scheduled Protection** - Pre-set times for automatic activation
-- **Onboarding Flow** - Guided setup with permissions requests
-- **Widget Support** - Home screen widget showing protection status
-- **Deep Link Support** - URL scheme for quick activation
-- **Haptic Feedback** - Tactile feedback throughout the app
-- **Dark Mode** - Full dark mode support with customizable accent colors
+- **Implemented:** onboarding, manual/timed sessions, persisted history and insights,
+  math/typing sobriety checks, a persisted 10-minute cooldown after three failures,
+  notification/deep-link routing, appearance settings, and an App Group-backed widget.
+  Early deactivation (including `boozeblocker://deactivate`) requires the sobriety gate.
+- **Device-only, awaiting physical-device validation:** Family Controls authorization,
+  app/category/web selection and ManagedSettings shields, app-removal prevention
+  during protection, and DeviceActivity expiry. Simulator uses
+  `NoopBlockingController`: session UI works, but apps are **not blocked**.
+- **Deferred/default off:** enabling these flags exposes prototype UI, not
+  production-ready integrations.
 
-### Planned Features (v2.0+)
-- **Oura Ring Integration** - Auto-detect drinking via biometrics (HRV, heart rate)
-- **Credit Card Alerts** - Auto-activate when you charge at a bar (via Plaid)
-- **Location Triggers** - Activate when entering bars/clubs
-- **Accountability Partner** - Share status with trusted friends
+| Flag (UserDefaults suffix) | Deferred feature |
+|---|---|
+| `integrations` | Oura, Plaid, Location; services are not instantiated while off |
+| `siriShortcuts` | Legacy Siri shortcuts UI |
+| `delayedMessages` | Message preview demo; no interception or sending |
+| `schedules` | Scheduled Protection settings; saved schedules do not activate protection |
+| `extraSobrietyTests` | Standalone math/typing/reaction/balance practice screens |
+| `morningSummary` | Summary of a stored protection session (requires history) |
 
-## Project Structure (41 Swift Files)
+Flags live in `BoozeBlocker/Core/FeatureFlags.swift`. In **DEBUG**, add Xcode
+launch arguments such as `-feature.integrations YES` or
+`-feature.extraSobrietyTests YES`. Equivalent UserDefaults keys are
+`feature.integrations`, etc. Remove the override or set it to `NO` to disable.
+Release builds ignore overrides and always keep these flags off.
 
-```
-BoozeBlocker/
-├── App/
-│   ├── BoozeBlockerApp.swift          # App entry point with onboarding flow
-│   └── ContentView.swift              # Main tab navigation with deep links
-│
-├── Features/
-│   ├── Home/
-│   │   ├── HomeView.swift             # Basic home view
-│   │   ├── HomeView+Enhanced.swift    # Enhanced home with all components
-│   │   └── Components/
-│   │       ├── DurationPickerSheet.swift
-│   │       ├── StatusCard.swift       # Animated shield status
-│   │       ├── QuickActionsView.swift # Quick activation buttons
-│   │       └── RecentActivityCard.swift
-│   │
-│   ├── Protection/
-│   │   ├── ShieldView.swift           # Shown when blocked app opened
-│   │   └── SobrietyTest/
-│   │       ├── SobrietyTestView.swift
-│   │       ├── MathTestView.swift     # Custom number pad
-│   │       └── TypingTestView.swift   # Type phrase backwards
-│   │
-│   ├── Settings/
-│   │   ├── SettingsView.swift
-│   │   ├── BlockedAppsView.swift
-│   │   ├── BlockedContactsView.swift
-│   │   ├── EmergencyContactsView.swift
-│   │   ├── ScheduleSettingsView.swift # Scheduled protection
-│   │   ├── AppearanceSettingsView.swift
-│   │   ├── PrivacySettingsView.swift
-│   │   └── HelpSupportView.swift
-│   │
-│   ├── History/
-│   │   ├── HistoryView.swift
-│   │   └── InsightsView.swift         # Statistics dashboard
-│   │
-│   ├── Onboarding/
-│   │   ├── OnboardingView.swift       # 5-page intro
-│   │   └── PermissionsView.swift      # Request permissions
-│   │
-│   └── Widget/
-│       └── BoozeBlockerWidget.swift   # Home screen widget
-│
-├── Core/
-│   ├── Models/
-│   │   ├── UserSettings.swift
-│   │   ├── ProtectionSession.swift
-│   │   ├── BlockedAttempt.swift
-│   │   ├── BlockedApp.swift           # 24 common apps pre-defined
-│   │   ├── BlockedContact.swift
-│   │   └── DurationOption.swift
-│   │
-│   ├── Services/
-│   │   ├── PersistenceService.swift   # UserDefaults storage
-│   │   ├── ProtectionManager.swift    # Central state manager
-│   │   ├── SobrietyTestService.swift  # Test generation
-│   │   ├── ContactsService.swift      # iOS Contacts access
-│   │   ├── ScreenTimeService.swift    # Screen Time API wrapper
-│   │   ├── NotificationService.swift  # Local notifications
-│   │   ├── AppearanceManager.swift    # Theme/colors
-│   │   ├── HapticService.swift        # Haptic feedback
-│   │   └── DeepLinkService.swift      # URL scheme handling
-│   │
-│   └── Extensions/
-│       ├── Color+Extensions.swift
-│       ├── Date+Extensions.swift
-│       ├── View+Extensions.swift      # Shake, glow, card styles
-│       └── String+Extensions.swift
-│
-└── Resources/
-    ├── Info.plist                     # Privacy descriptions
-    └── Assets.xcassets/               # App icon, colors
-```
-
-## Requirements
-
-- iOS 17.0+
-- Xcode 15.0+
-- Swift 5.9+
-
-## Setup in Xcode
+## Setup and signing
 
 ```sh
-brew install xcodegen && xcodegen generate && open BoozeBlocker.xcodeproj
+brew install xcodegen
+xcodegen generate
+open BoozeBlocker.xcodeproj
 ```
 
-Select the BoozeBlocker scheme and an iPhone simulator, then build and run.
-The generated project is committed. Make project changes in `project.yml`
-and regenerate. Device signing requires selecting your own development team.
-This phase does not enable Family Controls or configure App Group entitlements;
-Screen Time blocking remains simulated.
+Select the BoozeBlocker scheme and an iPhone simulator. The generated project is
+committed: edit `project.yml`, regenerate, and commit both together.
+`xcodegen generate && git diff --exit-code` on a clean checkout must produce no diff.
+CI uses the runner's default Xcode and resolves an available iPhone at runtime.
 
-## Permissions Required
+For device signing, use a **paid Apple Developer account**, set your development
+team and registered identifiers in `project.yml`, then regenerate. Enable Family
+Controls and the shared App Group (`group.com.connorq03.boozeblocker` by default)
+for the appropriate targets and provisioning profiles.
+TestFlight/App Store distribution requires Apple's **Family Controls distribution
+entitlement approval for each of these four bundle IDs**:
 
-| Permission | Purpose | Privacy Description |
-|------------|---------|---------------------|
-| Contacts | Select contacts to block/allow | Included in Info.plist |
-| Screen Time | Block apps | Requires Family Controls entitlement |
-| Notifications | Blocked attempt alerts | Requested at runtime |
-| Face ID | Secure history access | Included in Info.plist |
+- `com.connorq03.boozeblocker` — app
+- `com.connorq03.boozeblocker.shieldconfig` — ShieldConfiguration
+- `com.connorq03.boozeblocker.shieldaction` — ShieldAction
+- `com.connorq03.boozeblocker.activitymonitor` — DeviceActivityMonitor
 
-## URL Scheme (Deep Links)
+The widget (`com.connorq03.boozeblocker.widget`) needs App Group provisioning,
+not Family Controls. These defaults come from `project.yml`; substitute your
+registered prefix consistently. Unsigned builds do not validate entitlements.
 
+## iOS limitations
+
+| Limitation | Current behavior |
+|---|---|
+| No public API to block outgoing calls/SMS/iMessage to particular contacts | Contact lists are informational/emergency lists, not per-contact blocking. Shield whole Messages/WhatsApp-style apps where supported. Phone/emergency calls remain available. |
+| No incoming-call filtering implementation | No Call Directory extension is shipped; CallKit incoming-call filtering is deferred. |
+| Apps cannot enable Focus or intercept messages | No Focus-based contact blocking, message interception, or delayed delivery is provided. |
+| Users can revoke Screen Time authorization or disable Screen Time | Protection is a speed bump, not tamper-proof enforcement; foreground reconciliation reports unavailable/revoked authorization. |
+| DeviceActivity intervals must be at least 15 minutes | Background timed expiry is scheduled only for eligible intervals; shorter sessions rely on foreground reconciliation. Recurring schedules are deferred. |
+| Opening a shield does not notify the host app | Attempt counts record shield-button interactions, not every app opening. |
+| Temporary access requires an explicit shield/monitoring flow | No “Request 5 Minutes” bypass is shipped; passing the sobriety gate ends protection. |
+
+## Project layout
+
+| Path / target | Role |
+|---|---|
+| `BoozeBlocker/` | SwiftUI app: App routing, Features UI, Core models/services/extensions, Resources |
+| `Shared/` | App Group storage, session/attempt models, ManagedSettings names and token IDs shared across targets |
+| `BoozeBlockerWidget/` | Widget extension; shares storage/models, excludes ManagedSettings names |
+| `ShieldConfiguration/` | System shield appearance extension |
+| `ShieldAction/` | Shield-button logging and notification handoff |
+| `DeviceActivityMonitor/` | Clears shields and ends the stored session at monitored expiry |
+| `BoozeBlockerTests/`, `BoozeBlockerUITests/` | Unit and UI test targets |
+
+## Running tests
+
+List devices with `xcrun simctl list devices available`, then set an iPhone UDID:
+
+```sh
+xcodegen generate
+UDID="<available iPhone simulator UDID>"
+xcodebuild build -project BoozeBlocker.xcodeproj -scheme BoozeBlocker -destination "id=$UDID" CODE_SIGNING_ALLOWED=NO
+xcodebuild test -project BoozeBlocker.xcodeproj -scheme BoozeBlocker -destination "id=$UDID" CODE_SIGNING_ALLOWED=NO
+xcodebuild build -project BoozeBlocker.xcodeproj -scheme BoozeBlocker -destination 'generic/platform=iOS' CODE_SIGNING_ALLOWED=NO
 ```
-boozeblocker://activate              # Open activation flow
-boozeblocker://activate?duration=14400  # Activate for 4 hours
-boozeblocker://settings              # Open settings
-boozeblocker://history               # Open history
-```
 
-## Technical Architecture
+UI tests use `-resetState YES`; direct-to-tabs launches additionally use
+`-hasCompletedOnboarding YES -hasGrantedPermissions YES`. This skips onboarding,
+not real device authorization. Tests cover session persistence/migration, blocking
+controller wiring, sobriety gates, flags, onboarding, and hidden schedule settings.
 
-- **SwiftUI** - Modern declarative UI with animations
-- **MVVM** - Clean separation of concerns
-- **UserDefaults** - Local persistence (no server required)
-- **Combine** - Reactive state management
-- **WidgetKit** - Home screen widget
-- **CallKit** - Call blocking (incoming only)
+## Physical-device validation checklist
 
-## iOS Limitations & Workarounds
+Not completed by Simulator tests; use a signed iPhone build with Family Controls:
 
-| Feature | iOS Limitation | Our Approach |
-|---------|----------------|--------------|
-| App Blocking | Requires Screen Time API | ManagedSettings framework |
-| Outgoing Calls | Cannot block programmatically | Friction overlay + test |
-| SMS/iMessage | Cannot intercept | Block Messages app entirely |
-| Contact Blocking | No direct API | Focus Mode + overlay |
-
-## File Count Summary
-
-- **41 Swift files** total
-- **6 Models** - Data structures
-- **9 Services** - Business logic
-- **4 Extensions** - Utilities
-- **22 Views** - UI components
-
-## License
-
-MIT License - See LICENSE file for details
+- [ ] Grant Screen Time authorization; verify the real authentication sheet and picker token labels.
+- [ ] Select apps such as Instagram and Messages; activate a timed session and verify custom shields.
+- [ ] Tap both shield buttons; verify attempt ingestion and the “I need access” notification opens the sobriety test.
+- [ ] Verify passing the test removes shields; three failures persist a 10-minute cooldown across relaunch.
+- [ ] Verify Stop/deactivate links cannot bypass the test; selection editing and Reset All Data stay locked while active.
+- [ ] Activate for at least 15 minutes, force-quit the app, and verify expiry removes shields and records Timer Expired on relaunch.
+- [ ] Verify app removal is denied during protection and allowed after it ends.
+- [ ] Revoke authorization in system Settings; foreground the app and verify the warning/reconciliation.
+- [ ] Check widget state, notification routing, and shield behavior after relaunch/reboot on supported iOS versions.

@@ -1,6 +1,18 @@
 import XCTest
 
 final class OnboardingSmokeTests: XCTestCase {
+    func testScheduledProtectionIsHiddenByDefault() {
+        let app = XCUIApplication()
+        app.launchArguments = ["-resetState", "YES", "-hasCompletedOnboarding", "YES", "-hasGrantedPermissions", "YES"]
+        app.launch()
+        XCTAssertTrue(app.tabBars.buttons["Settings"].waitForExistence(timeout: 5))
+        app.tabBars.buttons["Settings"].tap()
+        XCTAssertTrue(app.navigationBars["Settings"].waitForExistence(timeout: 3))
+        XCTAssertFalse(app.staticTexts["Scheduled Protection"].exists)
+        app.swipeUp()
+        XCTAssertFalse(app.staticTexts["Scheduled Protection"].exists)
+    }
+
     func testOnboardingReachesTabs() {
         let app = XCUIApplication(); app.launchArguments = ["-resetState", "YES"]; app.launch()
         XCTAssertTrue(app.staticTexts["Welcome to Booze Blocker"].waitForExistence(timeout: 5))

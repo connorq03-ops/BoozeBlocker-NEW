@@ -74,51 +74,6 @@ extension View {
     }
 }
 
-// MARK: - Card Style
-
-extension View {
-    func cardStyle(padding: CGFloat = 16) -> some View {
-        self
-            .padding(padding)
-            .background(
-                RoundedRectangle(cornerRadius: 16)
-                    .fill(Color(.systemBackground))
-                    .shadow(color: .black.opacity(0.05), radius: 10, y: 5)
-            )
-    }
-    
-    func glassStyle() -> some View {
-        self
-            .background(.ultraThinMaterial)
-            .cornerRadius(16)
-    }
-}
-
-// MARK: - Loading Overlay
-
-extension View {
-    func loadingOverlay(isLoading: Bool, message: String = "Loading...") -> some View {
-        ZStack {
-            self
-                .disabled(isLoading)
-                .blur(radius: isLoading ? 2 : 0)
-            
-            if isLoading {
-                VStack(spacing: 16) {
-                    ProgressView()
-                        .scaleEffect(1.5)
-                    Text(message)
-                        .font(.subheadline)
-                        .foregroundColor(.secondary)
-                }
-                .padding(32)
-                .background(.ultraThinMaterial)
-                .cornerRadius(16)
-            }
-        }
-    }
-}
-
 // MARK: - Haptic Feedback
 
 extension View {
@@ -126,32 +81,6 @@ extension View {
         self.onTapGesture {
             let generator = UIImpactFeedbackGenerator(style: style)
             generator.impactOccurred()
-        }
-    }
-}
-
-struct HapticButton<Label: View>: View {
-    let action: () -> Void
-    let feedbackStyle: UIImpactFeedbackGenerator.FeedbackStyle
-    @ViewBuilder let label: () -> Label
-    
-    init(
-        feedbackStyle: UIImpactFeedbackGenerator.FeedbackStyle = .medium,
-        action: @escaping () -> Void,
-        @ViewBuilder label: @escaping () -> Label
-    ) {
-        self.feedbackStyle = feedbackStyle
-        self.action = action
-        self.label = label
-    }
-    
-    var body: some View {
-        Button {
-            let generator = UIImpactFeedbackGenerator(style: feedbackStyle)
-            generator.impactOccurred()
-            action()
-        } label: {
-            label()
         }
     }
 }
