@@ -59,6 +59,118 @@ final class ProtectionManagerTests: XCTestCase {
         XCTAssertEqual(persistence.loadSessionHistory().first?.endReason, .timerExpired)
     }
 
+    func testExtensionCompletionBeforeAppTickDoesNotArchiveCachedSession() async throws {
+        let (manager, persistence, blocker, defaults) = fixture()
+        manager.activateProtection(duration: 0.05)
+        let sessionID = try XCTUnwrap(manager.currentSession?.id)
+        let store = SharedStore(defaults: defaults)
+        store.appendPendingAttempt(type: .app, targetName: "Blocked app", targetIdentifier: "extension")
+        store.endCurrentSession(reason: .timerExpired)
+        let ended = try XCTUnwrap(persistence.loadSessionHistory().first)
+        try await Task.sleep(for: .seconds(1.3))
+        XCTAssertFalse(manager.isProtectionActive)
+        XCTAssertFalse(blocker.isBlocking)
+        XCTAssertNil(manager.currentSession)
+        let history = persistence.loadSessionHistory()
+        XCTAssertEqual(history.count, 1)
+        XCTAssertEqual(history.first?.id, sessionID)
+        XCTAssertEqual(history.first?.actualEndTime, ended.actualEndTime)
+        XCTAssertEqual(history.first?.blockedAttempts.first?.targetIdentifier, "extension")
+        manager.deactivateProtection(reason: .sobrietyTestPassed)
+        XCTAssertEqual(persistence.loadSessionHistory().count, 1)
+        XCTAssertEqual(persistence.loadSessionHistory().first?.endReason, .timerExpired)
+    }
+
+    func testInactiveReconcileResetsFailuresAndCooldownAfterExtensionCompletion() async {
+        let (manager, persistence, _, defaults) = fixture()
+        manager.activateProtection()
+        for _ in 0..<3 { manager.recordSobrietyFailure() }
+        XCTAssertGreaterThan(manager.sobrietyCooldownRemaining, 0)
+        SharedStore(defaults: defaults).endCurrentSession(reason: .timerExpired)
+        manager.reconcile()
+        XCTAssertEqual(manager.failedSobrietyAttempts, 0)
+        XCTAssertEqual(manager.sobrietyCooldownRemaining, 0)
+        XCTAssertEqual(persistence.loadSobrietyFailures(), 0)
+        XCTAssertNil(persistence.loadSobrietyCooldown())
+        manager.activateProtection()
+        manager.requestSobrietyTest()
+        XCTAssertTrue(manager.showSobrietyTest)
+        manager.deactivateProtection(reason: .sobrietyTestPassed)
+    }
+
+    func testInactiveReconcileClearsPartialFailureCount() async {
+        let (manager, persistence, _, defaults) = fixture()
+        manager.activateProtection()
+        manager.recordSobrietyFailure()
+        SharedStore(defaults: defaults).endCurrentSession(reason: .timerExpired)
+        manager.reconcile()
+        XCTAssertEqual(manager.failedSobrietyAttempts, 0)
+        XCTAssertEqual(persistence.loadSobrietyFailures(), 0)
+    }
+
+    func testUnchangedMonitorDeadlineSurvivesFinalFifteenMinutesAndRelaunch() async throws {
+        let (_, _, _, defaults) = fixture()
+        var monitoring = false
+        var starts = 0
+        var stops = 0
+        func monitor() -> ProtectionSessionMonitor {
+            ProtectionSessionMonitor(defaults: defaults, isMonitoring: { monitoring }, start: { _ in
+                starts += 1
+                monitoring = true
+            }, stop: {
+                stops += 1
+                monitoring = false
+            })
+        }
+        let now = Date()
+        let deadline = now.addingTimeInterval(3600)
+        let first = monitor()
+        try first.reconcile(until: deadline, now: now)
+        let originalStops = stops
+        try first.reconcile(until: deadline, now: deadline.addingTimeInterval(-600))
+        try monitor().reconcile(until: deadline, now: deadline.addingTimeInterval(-300))
+        XCTAssertTrue(monitoring)
+        XCTAssertEqual(starts, 1)
+        XCTAssertEqual(stops, originalStops)
+        first.stopMonitoring()
+        XCTAssertFalse(monitoring)
+        try monitor().reconcile(until: deadline, now: now)
+        XCTAssertEqual(starts, 2)
+    }
+
+    func testMonitorReschedulesChangedDeadlineAndRetriesMissingOrFailedSchedule() async throws {
+        let (_, _, _, defaults) = fixture()
+        var monitoring = false
+        var starts = 0
+        var fail = false
+        let monitor = ProtectionSessionMonitor(defaults: defaults, isMonitoring: { monitoring }, start: { _ in
+            starts += 1
+            if fail { throw NSError(domain: "monitor", code: 1) }
+            monitoring = true
+        }, stop: { monitoring = false })
+        let now = Date()
+        let deadline = now.addingTimeInterval(3600)
+        try monitor.reconcile(until: deadline, now: now)
+        try monitor.reconcile(until: deadline.addingTimeInterval(3600), now: now)
+        XCTAssertEqual(starts, 2)
+        monitoring = false
+        try monitor.reconcile(until: deadline.addingTimeInterval(3600), now: now)
+        XCTAssertEqual(starts, 3)
+        try monitor.reconcile(until: nil, now: now)
+        XCTAssertFalse(monitoring)
+        try monitor.reconcile(until: now.addingTimeInterval(600), now: now)
+        XCTAssertEqual(starts, 3)
+        fail = true
+        XCTAssertThrowsError(try monitor.reconcile(until: deadline, now: now))
+        fail = false
+        try monitor.reconcile(until: deadline, now: now)
+        XCTAssertEqual(starts, 5)
+        XCTAssertTrue(monitoring)
+        try monitor.reconcile(until: deadline.addingTimeInterval(60), now: deadline)
+        XCTAssertFalse(monitoring)
+        XCTAssertEqual(starts, 5)
+    }
+
     func testLaunchAndForegroundReconcileAndIngest() async throws {
         let (_, persistence, blocker, defaults) = fixture()
         let session = ProtectionSession(scheduledEndTime: Date().addingTimeInterval(3600))

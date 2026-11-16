@@ -68,8 +68,13 @@ final class ProtectionManager: ObservableObject {
     
     /// Deactivate protection with a reason
     func deactivateProtection(reason: EndReason) {
+        guard let cached = currentSession,
+              var session = persistence.loadCurrentSessionReadOnly(),
+              session.id == cached.id, session.isActive else {
+            reconcile()
+            return
+        }
         blocker.stopBlocking()
-        guard var session = currentSession else { return }
         session.blockedAttempts.append(contentsOf: persistence.drainPendingAttempts())
         
         session.end(reason: reason)
@@ -138,6 +143,7 @@ final class ProtectionManager: ObservableObject {
             stopTimer()
             showSobrietyTest = false
             blockingWarning = nil
+            resetSobrietyFailures()
         }
         WidgetCenter.shared.reloadAllTimelines()
     }

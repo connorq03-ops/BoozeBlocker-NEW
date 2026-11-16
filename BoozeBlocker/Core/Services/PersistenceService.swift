@@ -52,6 +52,10 @@ class PersistenceService {
         store.loadCurrentSession()
     }
 
+    func loadCurrentSessionReadOnly() -> ProtectionSession? {
+        store.loadCurrentSessionReadOnly()
+    }
+
     // MARK: - Session History
 
     func addToSessionHistory(_ session: ProtectionSession) {
