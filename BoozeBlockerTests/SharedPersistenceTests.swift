@@ -37,7 +37,7 @@ final class SharedPersistenceTests: XCTestCase {
     func testMigrationCopiesExistingKeysOnlyAndDoesNotRepeat() {
         let shared = defaults()
         let legacy = defaults()
-        let keys = [SharedKeys.userSettings, SharedKeys.currentSession, SharedKeys.sessionHistory, SharedKeys.blockedContacts]
+        let keys = [SharedKeys.userSettings, SharedKeys.currentSession, SharedKeys.sessionHistory, SharedKeys.blockedContacts, "blockedApps"]
         for key in keys { legacy.set(Data(key.utf8), forKey: key) }
         _ = PersistenceService(defaults: shared, legacy: legacy)
         XCTAssertTrue(shared.bool(forKey: SharedKeys.migratedFromStandard))
@@ -82,6 +82,47 @@ final class SharedPersistenceTests: XCTestCase {
         XCTAssertEqual(store.loadSessionHistory().count, 1)
         for _ in 0..<101 { store.addToSessionHistory(ProtectionSession()) }
         XCTAssertEqual(store.loadSessionHistory().count, 100)
+    }
+
+    func testNilDurationRoundTripEncodesExplicitNull() throws {
+        let settings = UserSettings(defaultDuration: nil)
+        let data = try JSONEncoder().encode(settings)
+        let object = try XCTUnwrap(JSONSerialization.jsonObject(with: data) as? [String: Any])
+        XCTAssertTrue(object["defaultDuration"] is NSNull)
+        XCTAssertEqual(try JSONDecoder().decode(UserSettings.self, from: data), settings)
+        let service = PersistenceService(defaults: defaults(), legacy: defaults())
+        service.saveUserSettings(settings)
+        XCTAssertEqual(service.loadUserSettings(), settings)
+    }
+
+    func testDurationExplicitNullAndMissingKey() throws {
+        let explicitNull = Data(#"{"defaultDuration":null}"#.utf8)
+        XCTAssertNil(try JSONDecoder().decode(UserSettings.self, from: explicitNull).defaultDuration)
+        XCTAssertEqual(try JSONDecoder().decode(UserSettings.self, from: Data("{}".utf8)).defaultDuration, 8 * 3600)
+    }
+
+    func testReadOnlySessionLoadDoesNotMutateStorage() throws {
+        let shared = defaults()
+        let store = SharedStore(defaults: shared)
+        XCTAssertNil(store.loadCurrentSessionReadOnly())
+        let corrupt = Data("invalid".utf8)
+        shared.set(corrupt, forKey: SharedKeys.currentSession)
+        XCTAssertNil(store.loadCurrentSessionReadOnly())
+        XCTAssertEqual(shared.data(forKey: SharedKeys.currentSession), corrupt)
+        let active = ProtectionSession(scheduledEndTime: Date().addingTimeInterval(3600))
+        store.saveCurrentSession(active)
+        XCTAssertEqual(store.loadCurrentSessionReadOnly()?.id, active.id)
+        let expired = ProtectionSession(scheduledEndTime: Date().addingTimeInterval(-60))
+        store.saveCurrentSession(expired)
+        store.addToSessionHistory(active)
+        let before = shared.dictionaryRepresentation() as NSDictionary
+        let loaded = try XCTUnwrap(store.loadCurrentSessionReadOnly())
+        XCTAssertEqual(loaded.id, expired.id)
+        XCTAssertFalse(ProtectionEntry.entries(for: loaded, now: Date())[0].isProtected)
+        XCTAssertEqual(shared.dictionaryRepresentation() as NSDictionary, before)
+        XCTAssertNil(store.loadCurrentSession())
+        XCTAssertEqual(store.loadSessionHistory().first?.id, expired.id)
+        XCTAssertEqual(store.loadSessionHistory().first?.endReason, .timerExpired)
     }
 
     func testExtendSessionAddsTwoHours() throws {

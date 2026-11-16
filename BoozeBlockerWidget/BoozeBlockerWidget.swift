@@ -26,7 +26,7 @@ struct ProtectionProvider: TimelineProvider {
     
     func getTimeline(in context: Context, completion: @escaping (Timeline<ProtectionEntry>) -> Void) {
         let now = Date()
-        let session = SharedStore(defaults: AppGroup.defaults).loadCurrentSession()
+        let session = SharedStore(defaults: AppGroup.defaults).loadCurrentSessionReadOnly()
         let entries = ProtectionEntry.entries(for: session, now: now)
         let policy: TimelineReloadPolicy = entries.count > 1 ? .atEnd : .after(now.addingTimeInterval(15 * 60))
         let timeline = Timeline(entries: entries, policy: policy)

@@ -16,7 +16,7 @@ class PersistenceService {
         userDefaults = defaults
         store = SharedStore(defaults: defaults)
         if !defaults.bool(forKey: SharedKeys.migratedFromStandard) {
-            for key in [SharedKeys.userSettings, SharedKeys.currentSession, SharedKeys.sessionHistory, SharedKeys.blockedContacts] {
+            for key in [SharedKeys.userSettings, SharedKeys.currentSession, SharedKeys.sessionHistory, SharedKeys.blockedContacts, Keys.blockedApps] {
                 if let value = legacy.object(forKey: key) {
                     defaults.set(value, forKey: key)
                 }

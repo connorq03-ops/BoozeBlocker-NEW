@@ -11,11 +11,16 @@ struct SharedStore {
         }
     }
 
-    func loadCurrentSession() -> ProtectionSession? {
+    func loadCurrentSessionReadOnly() -> ProtectionSession? {
         guard let data = defaults.data(forKey: SharedKeys.currentSession),
               let session = try? JSONDecoder().decode(ProtectionSession.self, from: data) else {
             return nil
         }
+        return session
+    }
+
+    func loadCurrentSession() -> ProtectionSession? {
+        guard let session = loadCurrentSessionReadOnly() else { return nil }
         if let end = session.scheduledEndTime, end < Date() {
             var expired = session
             expired.end(reason: .timerExpired)
