@@ -6,7 +6,7 @@ struct ProtectionSession: Codable, Identifiable {
     let startTime: Date
     
     /// When protection is scheduled to end (nil = manual deactivation only)
-    let scheduledEndTime: Date?
+    var scheduledEndTime: Date?
     
     /// When protection actually ended (nil = still active)
     var actualEndTime: Date?

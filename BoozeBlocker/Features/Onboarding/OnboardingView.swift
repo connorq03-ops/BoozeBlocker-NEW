@@ -98,10 +98,6 @@ struct OnboardingView: View {
     }
     
     private func completeOnboarding() {
-        var settings = PersistenceService.shared.loadUserSettings()
-        settings.hasCompletedOnboarding = true
-        PersistenceService.shared.saveUserSettings(settings)
-        
         withAnimation {
             hasCompletedOnboarding = true
         }

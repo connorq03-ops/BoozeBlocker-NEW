@@ -6,6 +6,7 @@ options:
 settings:
   base:
     BUNDLE_ID_PREFIX: com.connorq03.boozeblocker
+    APP_GROUP_ID: group.com.connorq03.boozeblocker
     DEVELOPMENT_TEAM: ""
     SWIFT_VERSION: "5.9"
     TARGETED_DEVICE_FAMILY: "1"
@@ -16,6 +17,10 @@ targets:
     type: application
     platform: iOS
     sources: [BoozeBlocker, Shared]
+    entitlements:
+      path: BoozeBlocker/Resources/BoozeBlocker.entitlements
+      properties:
+        com.apple.security.application-groups: [$(APP_GROUP_ID)]
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: $(BUNDLE_ID_PREFIX)
@@ -25,6 +30,7 @@ targets:
       path: BoozeBlocker/Resources/Info.plist
       properties:
         CFBundleDisplayName: Booze Blocker
+        AppGroupIdentifier: $(APP_GROUP_ID)
         CFBundleShortVersionString: $(MARKETING_VERSION)
         CFBundleVersion: $(CURRENT_PROJECT_VERSION)
         LSRequiresIPhoneOS: true
@@ -42,6 +48,10 @@ targets:
   BoozeBlockerWidget:
     type: app-extension
     platform: iOS
+    entitlements:
+      path: BoozeBlockerWidget/BoozeBlockerWidget.entitlements
+      properties:
+        com.apple.security.application-groups: [$(APP_GROUP_ID)]
     sources:
       - BoozeBlockerWidget
       - Shared
@@ -52,6 +62,7 @@ targets:
     info:
       path: BoozeBlockerWidget/Info.plist
       properties:
+        AppGroupIdentifier: $(APP_GROUP_ID)
         CFBundleDisplayName: Booze Blocker
         CFBundleShortVersionString: $(MARKETING_VERSION)
         CFBundleVersion: $(CURRENT_PROJECT_VERSION)
