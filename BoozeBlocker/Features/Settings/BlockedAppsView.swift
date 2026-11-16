@@ -49,5 +49,6 @@ struct BlockedAppsView: View {
             if active { showPicker = false }
         }
         .navigationTitle("Blocked Apps")
+        .navigationBarTitleDisplayMode(.inline)
     }
 }
