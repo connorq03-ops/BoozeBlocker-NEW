@@ -10,6 +10,10 @@ struct SharedStore {
     }()
 
     func saveCurrentSession(_ session: ProtectionSession?) {
+        _ = withStoreLock { saveCurrentSessionUnlocked(session) }
+    }
+
+    private func saveCurrentSessionUnlocked(_ session: ProtectionSession?) {
         if let session = session, let data = try? JSONEncoder().encode(session) {
             defaults.set(data, forKey: SharedKeys.currentSession)
         } else {
@@ -19,6 +23,10 @@ struct SharedStore {
 
     func loadCurrentSessionReadOnly() -> ProtectionSession? {
         defaults.synchronize()
+        return readCurrentSession()
+    }
+
+    private func readCurrentSession() -> ProtectionSession? {
         guard let data = defaults.data(forKey: SharedKeys.currentSession),
               let session = try? JSONDecoder().decode(ProtectionSession.self, from: data) else {
             return nil
@@ -27,16 +35,22 @@ struct SharedStore {
     }
 
     func loadCurrentSession() -> ProtectionSession? {
-        guard let session = loadCurrentSessionReadOnly() else { return nil }
-        if let end = session.scheduledEndTime, end < Date() {
-            endCurrentSession(reason: .timerExpired)
-            return nil
-        }
-        return session
+        withStoreLock {
+            guard let session = readCurrentSession() else { return nil }
+            if let end = session.scheduledEndTime, end < Date() {
+                endCurrentSessionUnlocked(reason: .timerExpired, expectedSessionID: session.id)
+                return nil
+            }
+            return session
+        } ?? nil
     }
 
     func loadSessionHistory() -> [ProtectionSession] {
         defaults.synchronize()
+        return readSessionHistory()
+    }
+
+    private func readSessionHistory() -> [ProtectionSession] {
         guard let data = defaults.data(forKey: SharedKeys.sessionHistory),
               let history = try? JSONDecoder().decode([ProtectionSession].self, from: data) else {
             return []
@@ -45,7 +59,11 @@ struct SharedStore {
     }
 
     func addToSessionHistory(_ session: ProtectionSession) {
-        var history = loadSessionHistory()
+        _ = withStoreLock { addToSessionHistoryUnlocked(session) }
+    }
+
+    private func addToSessionHistoryUnlocked(_ session: ProtectionSession) {
+        var history = readSessionHistory()
         guard !history.contains(where: { $0.id == session.id }) else { return }
         history.insert(session, at: 0)
         if let data = try? JSONEncoder().encode(Array(history.prefix(100))) {
@@ -57,17 +75,45 @@ struct SharedStore {
         defaults.removeObject(forKey: SharedKeys.sessionHistory)
     }
 
-    func endCurrentSession(reason: EndReason) {
-        guard var session = loadCurrentSessionReadOnly(), session.isActive else { return }
-        session.blockedAttempts.append(contentsOf: drainPendingAttempts())
+    @discardableResult
+    func endCurrentSession(reason: EndReason, expectedSessionID: UUID? = nil) -> ProtectionSession? {
+        withStoreLock {
+            endCurrentSessionUnlocked(reason: reason, expectedSessionID: expectedSessionID)
+        } ?? nil
+    }
+
+    @discardableResult
+    private func endCurrentSessionUnlocked(reason: EndReason, expectedSessionID: UUID?) -> ProtectionSession? {
+        guard var session = readCurrentSession(), session.isActive,
+              expectedSessionID == nil || session.id == expectedSessionID else { return nil }
+        session.blockedAttempts.append(contentsOf: drainPendingAttemptsUnlocked())
         session.end(reason: reason)
-        addToSessionHistory(session)
-        saveCurrentSession(nil)
+        addToSessionHistoryUnlocked(session)
+        saveCurrentSessionUnlocked(nil)
+        return session
+    }
+
+    func ingestPendingAttempts() -> ProtectionSession? {
+        withStoreLock {
+            guard var session = readCurrentSession(), session.isActive else { return nil }
+            session.blockedAttempts.append(contentsOf: drainPendingAttemptsUnlocked())
+            saveCurrentSessionUnlocked(session)
+            return session
+        } ?? nil
+    }
+
+    func updateCurrentSession(id: UUID, _ update: (inout ProtectionSession) -> Void) -> ProtectionSession? {
+        withStoreLock {
+            guard var session = readCurrentSession(), session.isActive, session.id == id else { return nil }
+            update(&session)
+            saveCurrentSessionUnlocked(session)
+            return session
+        } ?? nil
     }
 
     func appendPendingAttempt(type: AttemptType, targetName: String, targetIdentifier: String,
                               outcome: AttemptOutcome = .blocked) {
-        _ = withPendingAttemptsLock {
+        _ = withStoreLock {
             var attempts = loadPendingAttempts()
             attempts.append(BlockedAttempt(attemptType: type, targetName: targetName,
                                            targetIdentifier: targetIdentifier, outcome: outcome))
@@ -78,14 +124,16 @@ struct SharedStore {
     }
 
     func drainPendingAttempts() -> [BlockedAttempt] {
-        withPendingAttemptsLock {
-            let attempts = loadPendingAttempts()
-            defaults.removeObject(forKey: SharedKeys.pendingAttempts)
-            return attempts
-        } ?? []
+        withStoreLock { drainPendingAttemptsUnlocked() } ?? []
     }
 
-    private func withPendingAttemptsLock<T>(_ body: () -> T) -> T? {
+    private func drainPendingAttemptsUnlocked() -> [BlockedAttempt] {
+        let attempts = loadPendingAttempts()
+        defaults.removeObject(forKey: SharedKeys.pendingAttempts)
+        return attempts
+    }
+
+    private func withStoreLock<T>(_ body: () -> T) -> T? {
         let manager = FileManager.default
         let directory = Self.pendingAttemptsLockDirectory
         do {

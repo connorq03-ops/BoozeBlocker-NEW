@@ -18,6 +18,16 @@ private final class DrainedAttempts: @unchecked Sendable {
     }
 }
 
+private final class PausingSessionDefaults: UserDefaults {
+    var onSessionRead: (() -> Void)?
+
+    override func data(forKey defaultName: String) -> Data? {
+        let value = super.data(forKey: defaultName)
+        if defaultName == SharedKeys.currentSession { onSessionRead?() }
+        return value
+    }
+}
+
 final class ScreenTimeSharedStoreTests: XCTestCase {
     private func store() -> SharedStore {
         let suite = "ScreenTimeSharedStoreTests.\(UUID().uuidString)"
@@ -82,6 +92,74 @@ final class ScreenTimeSharedStoreTests: XCTestCase {
         XCTAssertEqual(store.loadSessionHistory().count, 1)
         XCTAssertEqual(store.loadSessionHistory().first?.endReason, .timerExpired)
         XCTAssertEqual(store.loadSessionHistory().first?.actualEndTime, session.actualEndTime)
+    }
+
+    func testSessionIngestionAndExtensionCompletionShareOneTransactionLock() throws {
+        let suite = "SessionTransaction.\(UUID().uuidString)"
+        let defaults = PausingSessionDefaults(suiteName: suite)!
+        addTeardownBlock { defaults.removePersistentDomain(forName: suite) }
+        let appStore = SharedStore(defaults: defaults)
+        let extensionStore = SharedStore(defaults: UserDefaults(suiteName: suite)!)
+        let session = ProtectionSession()
+        appStore.saveCurrentSession(session)
+        appStore.appendPendingAttempt(type: .app, targetName: "Blocked app", targetIdentifier: "pending")
+        let read = DispatchSemaphore(value: 0)
+        let resume = DispatchSemaphore(value: 0)
+        let ended = DispatchSemaphore(value: 0)
+        let ingested = DispatchSemaphore(value: 0)
+        let ending = DispatchSemaphore(value: 0)
+        defaults.onSessionRead = {
+            read.signal()
+            _ = resume.wait(timeout: .now() + 5)
+        }
+        DispatchQueue.global().async {
+            _ = appStore.ingestPendingAttempts()
+            ingested.signal()
+        }
+        XCTAssertEqual(read.wait(timeout: .now() + 5), .success)
+        DispatchQueue.global().async {
+            ending.signal()
+            extensionStore.endCurrentSession(reason: .timerExpired)
+            ended.signal()
+        }
+        XCTAssertEqual(ending.wait(timeout: .now() + 5), .success)
+        XCTAssertEqual(ended.wait(timeout: .now() + 0.1), .timedOut)
+        resume.signal()
+        XCTAssertEqual(ingested.wait(timeout: .now() + 5), .success)
+        XCTAssertEqual(ended.wait(timeout: .now() + 5), .success)
+        defaults.onSessionRead = nil
+        XCTAssertNil(appStore.loadCurrentSessionReadOnly())
+        let history = appStore.loadSessionHistory()
+        XCTAssertEqual(history.count, 1)
+        XCTAssertEqual(history.first?.id, session.id)
+        XCTAssertEqual(history.first?.blockedAttempts.map(\.targetIdentifier), ["pending"])
+        XCTAssertNil(appStore.ingestPendingAttempts())
+        XCTAssertNil(appStore.loadCurrentSessionReadOnly())
+    }
+
+    func testIngestionDoesNotDrainOrResurrectMissingEndedOrCorruptSession() {
+        let store = store()
+        var session = ProtectionSession()
+        session.end(reason: .timerExpired)
+        for data in [nil, try! JSONEncoder().encode(session), Data("invalid".utf8)] {
+            store.defaults.set(data, forKey: SharedKeys.currentSession)
+            store.appendPendingAttempt(type: .app, targetName: "Blocked app", targetIdentifier: "pending")
+            XCTAssertNil(store.ingestPendingAttempts())
+            XCTAssertEqual(store.defaults.data(forKey: SharedKeys.currentSession), data)
+            XCTAssertEqual(store.drainPendingAttempts().map(\.targetIdentifier), ["pending"])
+        }
+    }
+
+    func testOnlyMatchingSessionCanBeUpdatedOrCompleted() {
+        let store = store()
+        let session = ProtectionSession()
+        store.saveCurrentSession(session)
+        XCTAssertNil(store.endCurrentSession(reason: .manualStop, expectedSessionID: UUID()))
+        XCTAssertNil(store.updateCurrentSession(id: UUID()) { $0.scheduledEndTime = Date() })
+        XCTAssertEqual(store.loadCurrentSessionReadOnly()?.id, session.id)
+        XCTAssertEqual(store.endCurrentSession(reason: .timerExpired)?.id, session.id)
+        XCTAssertNil(store.updateCurrentSession(id: session.id) { $0.scheduledEndTime = Date() })
+        XCTAssertNil(store.endCurrentSession(reason: .manualStop))
     }
 
     func testConcurrentAppendsAndDrainsAcrossStoreInstancesAreNotLostOrDuplicated() {

@@ -56,6 +56,18 @@ class PersistenceService {
         store.loadCurrentSessionReadOnly()
     }
 
+    func ingestPendingAttempts() -> ProtectionSession? {
+        store.ingestPendingAttempts()
+    }
+
+    func endCurrentSession(reason: EndReason, expectedSessionID: UUID) -> ProtectionSession? {
+        store.endCurrentSession(reason: reason, expectedSessionID: expectedSessionID)
+    }
+
+    func updateCurrentSession(id: UUID, _ update: (inout ProtectionSession) -> Void) -> ProtectionSession? {
+        store.updateCurrentSession(id: id, update)
+    }
+
     // MARK: - Session History
 
     func addToSessionHistory(_ session: ProtectionSession) {
