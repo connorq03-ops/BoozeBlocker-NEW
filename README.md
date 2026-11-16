@@ -112,9 +112,7 @@ BoozeBlocker/
 ## Setup in Xcode
 
 ```sh
-brew install xcodegen
-xcodegen generate
-open BoozeBlocker.xcodeproj
+brew install xcodegen && xcodegen generate && open BoozeBlocker.xcodeproj
 ```
 
 Select the BoozeBlocker scheme and an iPhone simulator, then build and run.

@@ -27,6 +27,7 @@
 		4D6726E37FE17660D3B0CAC7 /* HistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 090151B039405A6A3FE40BDA /* HistoryView.swift */; };
 		510BC67C8F7E9A2701023D5A /* AppearanceSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CF4BF563AF08D303DADF384 /* AppearanceSettingsView.swift */; };
 		54624CB629E12DB4E68DE47E /* HelpSupportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 079192E8B81ABAEDAF14FE8C /* HelpSupportView.swift */; };
+		5BB5FC7E6C0F516299B7C726 /* DeepLinkServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A21C42D58F669596657F867B /* DeepLinkServiceTests.swift */; };
 		61927E463A521A806CEC3356 /* BlockedContactsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50BAAF14BF63E49448A3D19C /* BlockedContactsView.swift */; };
 		647106042EF42464E92F6E4D /* ContactsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E2107C64C3F81A69460A2D6 /* ContactsService.swift */; };
 		662632A480C03D2F605756E4 /* String+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E26BA4C755B402DA18071BC9 /* String+Extensions.swift */; };
@@ -44,7 +45,6 @@
 		8EDE70E56FB330BD5C14A6E1 /* UserSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D5F50BA4E8E73333762FE76 /* UserSettings.swift */; };
 		8FF017569F13D336A67FE3DC /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = A459FE0B4C08A0033E6B2008 /* PrivacyInfo.xcprivacy */; };
 		91FF25E832DE9FFD4F647423 /* BalanceTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90AB04487A9A1E1D00194EDF /* BalanceTestView.swift */; };
-		95718CCCE9A3304D26179C14 /* BoozeBlockerUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 177996B57F730ED34CE66276 /* BoozeBlockerUITests.swift */; };
 		9C0C7E74A9B0A5160269505D /* SiriShortcutsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 959AA4F18AA29E2D545BECEB /* SiriShortcutsView.swift */; };
 		A156AB2E8721415E0E71CBE0 /* BlockedContact.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2FDA3FB36F1E6EBAAC4540D /* BlockedContact.swift */; };
 		A2F12C3B599DBF8CFEEB9DA8 /* HapticService.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFB516437CAFD350F8BDA698 /* HapticService.swift */; };
@@ -66,9 +66,11 @@
 		EE28726BF08FF951D7320BC2 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28EF35366D02C9404D83A322 /* ContentView.swift */; };
 		F220DDB6EEFDD94084BC8C6E /* ScheduleSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CABED0AAC2F2BBC03B8FA32 /* ScheduleSettingsView.swift */; };
 		F38B28ED08B4A54B0C530C80 /* HomeView+Enhanced.swift in Sources */ = {isa = PBXBuildFile; fileRef = F45AA5DAB67B025D80DDAC67 /* HomeView+Enhanced.swift */; };
+		F55B75002A59D9B701F127B9 /* OnboardingSmokeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBDE83755E649B860864095A /* OnboardingSmokeTests.swift */; };
 		F5C63469CACA0B837026C7FD /* BoozeBlockerWidget.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = D279A377045DF0E8BAA8C48D /* BoozeBlockerWidget.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		F5C914171C4D696BECC4A6A6 /* ProtectionSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2609971425951E3BA94610B5 /* ProtectionSession.swift */; };
 		F8079A1D4D768CFFF2A85192 /* ProtectionSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2609971425951E3BA94610B5 /* ProtectionSession.swift */; };
+		F846F5D7592C5EEF4E30CA17 /* SobrietyTestServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7319CB2B26B7A1F2BE233816 /* SobrietyTestServiceTests.swift */; };
 		FDF0B490BA25D4A707F66234 /* Color+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6F0969DB0DB21F48FF336E2 /* Color+Extensions.swift */; };
 /* End PBXBuildFile section */
 
@@ -116,7 +118,6 @@
 		090151B039405A6A3FE40BDA /* HistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryView.swift; sourceTree = "<group>"; };
 		16FBD093B86ABA2F11366EF7 /* ReactionTestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReactionTestView.swift; sourceTree = "<group>"; };
 		170143CB5E7C658E9A7C4768 /* QuickActionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickActionsView.swift; sourceTree = "<group>"; };
-		177996B57F730ED34CE66276 /* BoozeBlockerUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoozeBlockerUITests.swift; sourceTree = "<group>"; };
 		1CABED0AAC2F2BBC03B8FA32 /* ScheduleSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleSettingsView.swift; sourceTree = "<group>"; };
 		1D5F50BA4E8E73333762FE76 /* UserSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSettings.swift; sourceTree = "<group>"; };
 		206BC0559B439A25B8D80660 /* BoozeBlocker.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = BoozeBlocker.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -145,6 +146,7 @@
 		603ABAC6C1E6181D4FB8C44C /* StatusCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusCard.swift; sourceTree = "<group>"; };
 		65124308841E6E30B48813C5 /* PersistenceService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistenceService.swift; sourceTree = "<group>"; };
 		69E1C7E34ECF3818E263A5B2 /* TypingTestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypingTestView.swift; sourceTree = "<group>"; };
+		7319CB2B26B7A1F2BE233816 /* SobrietyTestServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SobrietyTestServiceTests.swift; sourceTree = "<group>"; };
 		783FEEFD31C1C9C8C7D4753E /* OuraService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OuraService.swift; sourceTree = "<group>"; };
 		7A7DC86FAD51EE027AC73FCD /* BoozeBlockerWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoozeBlockerWidget.swift; sourceTree = "<group>"; };
 		7BA3085001E46412D1DDAB6F /* InsightsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsightsView.swift; sourceTree = "<group>"; };
@@ -156,9 +158,11 @@
 		90AB04487A9A1E1D00194EDF /* BalanceTestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BalanceTestView.swift; sourceTree = "<group>"; };
 		952E3CA6CEB70FDC94111635 /* SobrietyTestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SobrietyTestView.swift; sourceTree = "<group>"; };
 		959AA4F18AA29E2D545BECEB /* SiriShortcutsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SiriShortcutsView.swift; sourceTree = "<group>"; };
+		A21C42D58F669596657F867B /* DeepLinkServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeepLinkServiceTests.swift; sourceTree = "<group>"; };
 		A459FE0B4C08A0033E6B2008 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		B16AC66DEEB854FD5ED8796F /* AppearanceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearanceManager.swift; sourceTree = "<group>"; };
 		B73238DE1B15FC1F011DEEC4 /* SobrietyTestService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SobrietyTestService.swift; sourceTree = "<group>"; };
+		BBDE83755E649B860864095A /* OnboardingSmokeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingSmokeTests.swift; sourceTree = "<group>"; };
 		BF5BC0A6C11D8ACD7E4B7844 /* RecentActivityCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentActivityCard.swift; sourceTree = "<group>"; };
 		C5E0FF3992ECEBDD29235746 /* ShieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShieldView.swift; sourceTree = "<group>"; };
 		CD888538B605D6200A82C167 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
@@ -222,7 +226,9 @@
 		24DBDD297F700523C2FBF1E1 /* BoozeBlockerTests */ = {
 			isa = PBXGroup;
 			children = (
+				A21C42D58F669596657F867B /* DeepLinkServiceTests.swift */,
 				58EE2D6BCAA37DBEA7781476 /* ProtectionSessionTests.swift */,
+				7319CB2B26B7A1F2BE233816 /* SobrietyTestServiceTests.swift */,
 			);
 			path = BoozeBlockerTests;
 			sourceTree = "<group>";
@@ -253,7 +259,7 @@
 		34B64122F75D0565B60DA85B /* BoozeBlockerUITests */ = {
 			isa = PBXGroup;
 			children = (
-				177996B57F730ED34CE66276 /* BoozeBlockerUITests.swift */,
+				BBDE83755E649B860864095A /* OnboardingSmokeTests.swift */,
 			);
 			path = BoozeBlockerUITests;
 			sourceTree = "<group>";
@@ -626,7 +632,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				95718CCCE9A3304D26179C14 /* BoozeBlockerUITests.swift in Sources */,
+				F55B75002A59D9B701F127B9 /* OnboardingSmokeTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -645,7 +651,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5BB5FC7E6C0F516299B7C726 /* DeepLinkServiceTests.swift in Sources */,
 				8BE818FB4766554E0C2AE568 /* ProtectionSessionTests.swift in Sources */,
+				F846F5D7592C5EEF4E30CA17 /* SobrietyTestServiceTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
